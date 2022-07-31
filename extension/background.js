@@ -7,6 +7,14 @@ const main = () => {
     contexts: ['selection'],
   })
 
+  // 通信
+  let LATEST_MESSAGE = ''
+
+  chrome.runtime.onMessage.addListener((msg) => {
+    console.log('bg received msg ', msg)
+    LATEST_MESSAGE = msg
+  })
+
   chrome.contextMenus.onClicked.addListener((evt) => {
     const {
       editable,
@@ -35,15 +43,16 @@ const main = () => {
     //   left: 100,
     // })
 
-    chrome.notifications.create(
-      {
-        title: 'test',
-        type: 'basic',
-        message: 'test message',
-        iconUrl: 'icon.png',
-        requireInteraction: true,
-      }
-    )
+    const notificationPayload = {
+      title: 'test',
+      type: 'basic',
+      // todo
+      message:  String(LATEST_MESSAGE) || 'test message',
+      iconUrl: 'icon.png',
+      requireInteraction: true,
+    }
+    console.log('notificationPayload ', notificationPayload)
+    chrome.notifications.create(notificationPayload)
 
     chrome.tabs.query({}, (result) => {
       console.log('Tabs query ', result)
