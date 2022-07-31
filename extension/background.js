@@ -28,10 +28,22 @@ const main = () => {
     //   url: 'popup.html',
     // })
 
-    chrome.windows.create({
-      url: chrome.runtime.getURL('popup.html'),
-      type: 'popup'
-    })
+    // chrome.windows.create({
+    //   url: chrome.runtime.getURL('popup.html'),
+    //   type: 'popup',
+    //   height: 300,
+    //   left: 100,
+    // })
+
+    chrome.notifications.create(
+      {
+        title: 'test',
+        type: 'basic',
+        message: 'test message',
+        iconUrl: 'icon.png',
+        requireInteraction: true,
+      }
+    )
 
     chrome.tabs.query({}, (result) => {
       console.log('Tabs query ', result)

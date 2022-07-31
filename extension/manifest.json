@@ -6,7 +6,8 @@
     "service_worker": "background.js"
   },
   "permissions": [
-    "contextMenus"
+    "contextMenus",
+    "notifications"
   ],
   "action": {
     "default_title": "My Bookmarks",
