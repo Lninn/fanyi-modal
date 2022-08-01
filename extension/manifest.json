@@ -9,6 +9,9 @@
     "contextMenus",
     "notifications"
   ],
+  "host_permissions": [
+    "http://api.fanyi.baidu.com/"
+  ],
   "action": {
     "default_title": "My Bookmarks",
     "default_icon": "icon.png",

@@ -15,48 +15,16 @@ const main = () => {
     LATEST_MESSAGE = msg
   })
 
-  chrome.contextMenus.onClicked.addListener((evt) => {
-    const {
-      editable,
-      frameId,
-      menuItemId,
-      pageUrl,
-      selectionText,
-    } = evt
+  chrome.contextMenus.onClicked.addListener(() => {
+    fetch(LATEST_MESSAGE)
+      .then(res => res.json())
+      .then(res => {
+        const { trans_result } = res
+        const [{ src, dst }] = trans_result
 
-    console.log('hello', {
-      editable,
-      frameId,
-      menuItemId,
-      pageUrl,
-      selectionText,
-    }, chrome)
-
-    // chrome.tabs.create({
-    //   url: 'popup.html',
-    // })
-
-    // chrome.windows.create({
-    //   url: chrome.runtime.getURL('popup.html'),
-    //   type: 'popup',
-    //   height: 300,
-    //   left: 100,
-    // })
-
-    const notificationPayload = {
-      title: 'test',
-      type: 'basic',
-      // todo
-      message:  String(LATEST_MESSAGE) || 'test message',
-      iconUrl: 'icon.png',
-      requireInteraction: false,
-    }
-    console.log('notificationPayload ', notificationPayload)
-    chrome.notifications.create(notificationPayload)
-
-    chrome.tabs.query({}, (result) => {
-      console.log('Tabs query ', result)
-    })
+        const msg = `${src}: ${dst}`
+        notifications(msg)
+      })
   })
 
   chrome.runtime.onConnect.addListener((port) => {
@@ -72,6 +40,18 @@ const main = () => {
 chrome.runtime.onInstalled.addListener(async () => {
   main()
 })
+
+const notifications = (msg) => {
+  const notificationPayload = {
+    title: 'test',
+    type: 'basic',
+    // todo
+    message: msg || 'test message',
+    iconUrl: 'icon.png',
+    requireInteraction: false,
+  }
+  chrome.notifications.create(notificationPayload)
+}
 
 
 // https://developer.chrome.com/docs/extensions/reference/action/
