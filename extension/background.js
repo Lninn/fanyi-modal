@@ -49,7 +49,7 @@ const main = () => {
       // todo
       message:  String(LATEST_MESSAGE) || 'test message',
       iconUrl: 'icon.png',
-      requireInteraction: true,
+      requireInteraction: false,
     }
     console.log('notificationPayload ', notificationPayload)
     chrome.notifications.create(notificationPayload)
