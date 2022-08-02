@@ -1,4 +1,10 @@
+import { htmlString } from './modal.jsx'
+
 console.log('log from content.js...')
+
+const modalWrap = document.createElement('div')
+modalWrap.innerHTML = htmlString
+document.body.append(modalWrap)
 
 document.addEventListener('mouseup', (e) => {
   const selection = document.getSelection()
