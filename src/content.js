@@ -1,15 +1,3 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else {
-		var a = factory();
-		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
-	}
-})(self, () => {
-return /******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
 console.log('log from content.js...')
 
 document.addEventListener('mouseup', (e) => {
@@ -147,8 +135,3 @@ function md5(inputString) {
   }
   return rh(a)+rh(b)+rh(c)+rh(d);
 }
-
-/******/ 	return __webpack_exports__;
-/******/ })()
-;
-});
