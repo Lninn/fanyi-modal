@@ -27,6 +27,8 @@ const main = () => {
     if (menuItemId === 'Translate') {
       const url = createTranslateUrl(LATEST_PAYLOAD.q)
 
+      sendMessage(currentActiveTabId, { type: 'translate-start' })
+
       fetch(url)
         .then(res => res.json())
         .then(res => {
@@ -39,8 +41,11 @@ const main = () => {
           const [{ src, dst }] = trans_result
 
           const msg = `${src}: ${dst}`
-          notifications(msg)
+          // notifications(msg)
           sendMessage(currentActiveTabId, { type: 'translate', result: msg })
+        })
+        .catch(err => {
+          console.error(err)
         })
     }
   })

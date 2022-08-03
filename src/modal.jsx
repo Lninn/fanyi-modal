@@ -4,14 +4,18 @@ import { renderToString } from 'react-dom/server'
 import './modal.less'
 
 
-const modalELement = (
-  <div className="modal">
-    fanyi
-  </div>
-)
-
-const htmlString = renderToString(modalELement)
+const createModal = (text) => {
+  const modalELement = (
+    <div className="modal">
+      {text}
+    </div>
+  )
+  
+  const htmlString = renderToString(modalELement)
+  
+  return htmlString
+}
 
 export {
-  htmlString
+  createModal
 }

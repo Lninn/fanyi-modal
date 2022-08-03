@@ -227,6 +227,9 @@ var main = function main() {
 
     if (menuItemId === 'Translate') {
       var url = createTranslateUrl(LATEST_PAYLOAD.q);
+      sendMessage(currentActiveTabId, {
+        type: 'translate-start'
+      });
       fetch(url).then(function (res) {
         return res.json();
       }).then(function (res) {
@@ -242,12 +245,14 @@ var main = function main() {
             src = _trans_result$.src,
             dst = _trans_result$.dst;
 
-        var msg = "".concat(src, ": ").concat(dst);
-        notifications(msg);
+        var msg = "".concat(src, ": ").concat(dst); // notifications(msg)
+
         sendMessage(currentActiveTabId, {
           type: 'translate',
           result: msg
         });
+      })["catch"](function (err) {
+        console.error(err);
       });
     }
   });

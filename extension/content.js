@@ -27,7 +27,7 @@ return /******/ (() => { // webpackBootstrap
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_pnpm_css_loader_6_7_1_webpack_5_74_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_pnpm_css_loader_6_7_1_webpack_5_74_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".modal {\n  display: none;\n  position: fixed;\n  top: 300px;\n  left: 300px;\n  height: 200px;\n  width: 200px;\n  background-color: aqua;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#fanyi-modal {\n  display: none;\n  position: fixed;\n  top: 300px;\n  left: 300px;\n}\n.modal {\n  padding: 12px;\n  border: 1px solid #e5e5e5;\n  background-color: #fff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -17647,10 +17647,15 @@ var update = injectStylesIntoStyleTag_default()(modal/* default */.Z, options);
 
 
 
-var modalELement = /*#__PURE__*/react_default().createElement("div", {
-  className: "modal"
-}, "fanyi");
-var htmlString = (0,server_browser/* renderToString */.Dq)(modalELement);
+
+var createModal = function createModal(text) {
+  var modalELement = /*#__PURE__*/react_default().createElement("div", {
+    className: "modal"
+  }, text);
+  var htmlString = (0,server_browser/* renderToString */.Dq)(modalELement);
+  return htmlString;
+};
+
 
 ;// CONCATENATED MODULE: ./src/content.js
 
@@ -17658,8 +17663,24 @@ console.log('log from content.js...');
 chrome.runtime.sendMessage({
   type: 'content load'
 });
+var mouseInfo;
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log('[content] ', request);
+  console.log('[content] ', request, mouseInfo);
+  var el = document.getElementById('fanyi-modal');
+
+  if (request.type === 'translate-start') {
+    el.style.display = 'block';
+
+    if (mouseInfo) {
+      el.style.left = mouseInfo.left + 'px';
+      el.style.top = mouseInfo.top + 'px';
+    }
+
+    el.innerHTML = createModal('loading...');
+  } else if (request.type === 'translate') {
+    el.innerHTML = createModal(request.result);
+  }
+
   sendResponse({
     type: 'content is ok'
   });
@@ -17669,20 +17690,19 @@ document.addEventListener('mouseup', function (evt) {
 
   if (selection.type === 'Range') {
     var text = getHighlightText();
-    var mouseInfo = getMouseInfo(evt);
+    mouseInfo = getMouseInfo(evt);
     send({
-      q: text,
-      info: mouseInfo
+      q: text
     });
   }
 });
 
 var getMouseInfo = function getMouseInfo(evt) {
-  var pageX = evt.pageX,
-      pageY = evt.pageY;
+  var x = evt.x,
+      y = evt.y;
   return {
-    left: pageX,
-    top: pageY
+    left: x,
+    top: y
   };
 };
 
@@ -17702,13 +17722,19 @@ var send = function send(payload) {
   chrome.runtime.sendMessage(payload);
 };
 
-var createUI = function createUI(contentString) {
+var createUI = function createUI() {
   var modalWrap = document.createElement('div');
-  modalWrap.innerHTML = contentString;
+  modalWrap.id = "fanyi-modal";
+  modalWrap.innerHTML = createModal('loading...');
   document.body.append(modalWrap);
 };
 
-createUI(htmlString);
+createUI(); // todo
+
+window.addEventListener('click', function () {
+  var el = document.getElementById('fanyi-modal');
+  el.style.display = 'none';
+});
 })();
 
 /******/ 	return __webpack_exports__;
