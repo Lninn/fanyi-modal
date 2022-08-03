@@ -17655,6 +17655,15 @@ var htmlString = (0,server_browser/* renderToString */.Dq)(modalELement);
 ;// CONCATENATED MODULE: ./src/content.js
 
 console.log('log from content.js...');
+chrome.runtime.sendMessage({
+  type: 'content load'
+});
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log('[content] ', request);
+  sendResponse({
+    type: 'content is ok'
+  });
+});
 document.addEventListener('mouseup', function (evt) {
   var selection = document.getSelection();
 
@@ -17689,6 +17698,7 @@ var getHighlightText = function getHighlightText() {
 
 
 var send = function send(payload) {
+  // console.log('[background-send] ', payload)
   chrome.runtime.sendMessage(payload);
 };
 

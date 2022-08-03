@@ -3,6 +3,15 @@ import { htmlString } from './modal.jsx'
 
 console.log('log from content.js...')
 
+chrome.runtime.sendMessage({ type: 'content load' })
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    console.log('[content] ', request)
+    sendResponse({ type: 'content is ok' })
+  }
+);
+
 document.addEventListener('mouseup', (evt) => {
   const selection = document.getSelection()
 
@@ -46,6 +55,7 @@ const getHighlightText = () => {
 
 // 通信
 const send = (payload) => {
+  // console.log('[background-send] ', payload)
   chrome.runtime.sendMessage(payload)
 }
 

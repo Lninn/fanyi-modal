@@ -9,6 +9,8 @@ const main = () => {
     contexts: ['selection'],
   })
 
+  let currentActiveTabId
+
   // 通信
   let LATEST_PAYLOAD = null
 
@@ -20,6 +22,7 @@ const main = () => {
     const { menuItemId } = evt
 
     if (!LATEST_PAYLOAD) return
+    // console.log({ menuItemId, LATEST_PAYLOAD })
 
     if (menuItemId === 'Translate') {
       const url = createTranslateUrl(LATEST_PAYLOAD.q)
@@ -37,23 +40,40 @@ const main = () => {
 
           const msg = `${src}: ${dst}`
           notifications(msg)
+          sendMessage(currentActiveTabId, { type: 'translate', result: msg })
         })
     }
   })
 
-  chrome.runtime.onConnect.addListener((port) => {
-    console.log('Connected... ', port)
+  chrome.runtime.onMessage.addListener(
+    function(request, sender) {
+      const { tab: { id } } = sender
+      currentActiveTabId = id
 
-    port.onMessage.addListener((msg) => {
-      console.log('message recived ' + msg);
-      port.postMessage('Hi Popup.js')
-    })
-  })
+      console.log(JSON.stringify(request))
+    }
+  );
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
   main()
 })
+
+const sendMessage = (tabId, payload) => {
+  if (!tabId) return
+
+  chrome.tabs.sendMessage(
+    tabId,
+    payload,
+    function(response) {
+      if (!chrome.runtime.lastError) {
+        console.log('[background] send ok, response ok ' + JSON.stringify(response))
+      } else {
+        console.log('[background] send ok, response not ok')
+      }
+    }
+  )
+}
 
 const notifications = (msg) => {
   const notificationPayload = {

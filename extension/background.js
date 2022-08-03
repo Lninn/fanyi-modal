@@ -214,7 +214,8 @@ var main = function main() {
     title: commandId + ' "%s"',
     id: commandId,
     contexts: ['selection']
-  }); // 通信
+  });
+  var currentActiveTabId; // 通信
 
   var LATEST_PAYLOAD = null;
   chrome.runtime.onMessage.addListener(function (payload) {
@@ -222,7 +223,7 @@ var main = function main() {
   });
   chrome.contextMenus.onClicked.addListener(function (evt) {
     var menuItemId = evt.menuItemId;
-    if (!LATEST_PAYLOAD) return;
+    if (!LATEST_PAYLOAD) return; // console.log({ menuItemId, LATEST_PAYLOAD })
 
     if (menuItemId === 'Translate') {
       var url = createTranslateUrl(LATEST_PAYLOAD.q);
@@ -243,15 +244,17 @@ var main = function main() {
 
         var msg = "".concat(src, ": ").concat(dst);
         notifications(msg);
+        sendMessage(currentActiveTabId, {
+          type: 'translate',
+          result: msg
+        });
       });
     }
   });
-  chrome.runtime.onConnect.addListener(function (port) {
-    console.log('Connected... ', port);
-    port.onMessage.addListener(function (msg) {
-      console.log('message recived ' + msg);
-      port.postMessage('Hi Popup.js');
-    });
+  chrome.runtime.onMessage.addListener(function (request, sender) {
+    var id = sender.tab.id;
+    currentActiveTabId = id;
+    console.log(JSON.stringify(request));
   });
 };
 
@@ -269,6 +272,17 @@ chrome.runtime.onInstalled.addListener( /*#__PURE__*/_asyncToGenerator( /*#__PUR
     }
   }, _callee);
 })));
+
+var sendMessage = function sendMessage(tabId, payload) {
+  if (!tabId) return;
+  chrome.tabs.sendMessage(tabId, payload, function (response) {
+    if (!chrome.runtime.lastError) {
+      console.log('[background] send ok, response ok ' + JSON.stringify(response));
+    } else {
+      console.log('[background] send ok, response not ok');
+    }
+  });
+};
 
 var notifications = function notifications(msg) {
   var notificationPayload = {
