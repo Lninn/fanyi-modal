@@ -27,7 +27,7 @@ return /******/ (() => { // webpackBootstrap
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_pnpm_css_loader_6_7_1_webpack_5_74_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_pnpm_css_loader_6_7_1_webpack_5_74_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#fanyi-modal {\n  display: none;\n  position: fixed;\n  top: 300px;\n  left: 300px;\n}\n.modal {\n  padding: 12px;\n  border: 1px solid #e5e5e5;\n  background-color: #fff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#fanyi-modal {\n  display: none;\n  position: fixed;\n}\n.modal {\n  padding: 12px;\n  border: 1px solid #e5e5e5;\n  background-color: #fff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -17649,8 +17649,23 @@ var update = injectStylesIntoStyleTag_default()(modal/* default */.Z, options);
 
 
 var createModal = function createModal(text) {
+  var clsPrefix = 'fanyi';
+  var cls = "".concat(clsPrefix, "-modal");
+
+  var handleUserClick = function handleUserClick(evt) {
+    var target = evt.target;
+    var clsSelector = '#fanyi-modal';
+
+    if (target.closest(clsSelector)) {
+      console.log('ok');
+    } else {
+      console.log('not ok');
+    }
+  };
+
+  window.addEventListener('click', handleUserClick);
   var modalELement = /*#__PURE__*/react_default().createElement("div", {
-    className: "modal"
+    className: cls
   }, text);
   var htmlString = (0,server_browser/* renderToString */.Dq)(modalELement);
   return htmlString;
