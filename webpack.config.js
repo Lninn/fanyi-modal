@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack')
 
+require('dotenv').config({ path: './.env' })
+
+
 module.exports = {
   mode: "production",
   entry: {
@@ -42,7 +45,7 @@ module.exports = {
   plugins:[
     // https://stackoverflow.com/questions/70368760/react-uncaught-referenceerror-process-is-not-defined
     new webpack.DefinePlugin({
-        process: {env: {}}
+      "process.env": JSON.stringify(process.env),
     })
   ]
 };

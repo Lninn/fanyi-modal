@@ -1,39 +1,115 @@
 import React from 'react'
-import { renderToString } from 'react-dom/server'
+import ReactDOM from 'react-dom/client'
+import classnames from 'classnames'
 
-import './modal.less'
-
-
-const createModal = (text) => {
-  const clsPrefix = 'fanyi'
-
-  const cls = `${clsPrefix}-modal`
-
-  const handleUserClick = (evt) => {
-    const target = evt.target
+import './Modal.less'
 
 
-    const clsSelector = '#fanyi-modal'
-    if (target.closest(clsSelector)) {
-      console.log('ok')
+const createStore = (initialState) => {
+  let state = initialState;
+  const getState = () => state;
+  const listeners = new Set();
+  const setState = (fn) => {
+    if (typeof fn === 'function') {
+      state = fn(state);
     } else {
-      console.log('not ok')
+      state = { ...state, ...fn };
     }
+    
+    listeners.forEach((l) => l());
   }
 
-  window.addEventListener('click', handleUserClick)
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  }
 
-  const modalELement = (
-    <div className={cls}>
-      {text}
-    </div>
+  return {getState, setState, subscribe}
+}
+
+const useStore = (store) => {
+  return React.useSyncExternalStore(
+    store.subscribe,
+    React.useCallback(
+      () =>store.getState(),
+      [store],
+    )
   )
-  
-  const htmlString = renderToString(modalELement)
-  
-  return htmlString
 }
 
-export {
-  createModal
+const rootId = 'id-fanyi'
+
+const initialState = {
+  visible: false,
+  loading: false,
+
+  left: 0,
+  top: 0,
+
+  src: '-',
+  dst: '-',
 }
+
+export const store = createStore(initialState);
+
+export const rejectModal = () => {
+  let rootDom = document.getElementById(rootId)
+  
+  if (!rootDom) {
+    rootDom = document.createElement('div')
+    rootDom.id = rootId
+
+    document.body.append(rootDom)
+  }
+
+  const root = ReactDOM.createRoot(rootDom)
+  root.render(<App />)
+}
+
+const App = () => {
+  const appState = useStore(store)
+
+  const clsPrefix = 'fanyiModal'
+  const cls = classnames(
+    clsPrefix,
+    [appState.visible ? 'show': 'hide']
+  )
+
+  React.useEffect(() => {
+    const handleUserClick = (evt) => {
+      const target = evt.target
+    
+      const clsSelector = `#${rootId}`
+      if (!target.closest(clsSelector)) {
+        store.setState({ visible: false })
+      }
+    }
+
+    window.addEventListener('click', handleUserClick)
+
+    return () => {
+      window.removeEventListener('click', handleUserClick)
+    }
+  }, [])
+
+  const style = {
+    left: appState.left,
+    top: appState.top,
+  }
+
+  return (
+    <div className={cls} style={style}>
+      <div className={`${clsPrefix}-from`}>
+        {appState.src}
+      </div>
+
+      <div className={`${clsPrefix}-split-line`} />
+
+      <div className={`${clsPrefix}-to`}>
+        {appState.dst}
+      </div>
+    </div>
+  );
+}
+
+// https://blog.saeloun.com/2021/12/30/react-18-usesyncexternalstore-api
