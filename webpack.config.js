@@ -1,15 +1,23 @@
 const path = require('path');
 const webpack = require('webpack')
+const CopyPlugin = require("copy-webpack-plugin")
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+require('dotenv').config({ path: './.env' })
+
+
+const outputPath = path.resolve(__dirname, 'build')
 
 module.exports = {
   mode: "production",
   entry: {
     background: '/src/background.js',
     content: '/src/content.js',
+    popup: '/src/popup.js',
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'extension'),
+    path: outputPath,
     libraryTarget: "umd"
   },
   optimization: {
@@ -42,7 +50,18 @@ module.exports = {
   plugins:[
     // https://stackoverflow.com/questions/70368760/react-uncaught-referenceerror-process-is-not-defined
     new webpack.DefinePlugin({
-        process: {env: {}}
-    })
+      "process.env": JSON.stringify(process.env),
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, 'asset') },
+      ],
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Popup page',
+      filename: 'popup.html',
+      chunks: ['popup'],
+      minify: false,
+    }),
   ]
 };

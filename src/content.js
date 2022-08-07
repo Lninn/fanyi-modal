@@ -1,94 +1,72 @@
-import { createModal } from './modal.jsx'
+import {
+  CONTENT_LOAD,
+  TRANSLATE_START,
+  TRANSLATE_END,
+  TRANSLATE_ERROR,
+} from './action'
+import { rejectModal, store } from './Modal.jsx'
 
 
-console.log('log from content.js...')
+const __main = () => {
 
-chrome.runtime.sendMessage({ type: 'content load' })
+  const onRuntimeMessage = (request, _, sendResponse) => {
+    let appState
 
-let mouseInfo
-
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    console.log('[content] ', request, mouseInfo)
-
-    const el = document.getElementById('fanyi-modal')
-    if (request.type === 'translate-start') {
-
-      el.style.display = 'block'
-
-      if (mouseInfo) {
-        el.style.left = mouseInfo.left + 'px'
-        el.style.top = mouseInfo.top + 'px'
+    if (request.type === TRANSLATE_START) {
+      appState = {
+        visible: true,
+        loading: true,
       }
-
-      el.innerHTML = createModal('loading...')
-    } else if (request.type === 'translate') {
-      el.innerHTML = createModal(request.result)
+    } else if (request.type === TRANSLATE_END) {
+      appState = {
+        loading: false,
+        ...request.payload,
+      }
+    } else if (request.type === TRANSLATE_ERROR) {
+      appState = {
+        visible: false,
+        loading: false,
+      }
     }
 
-    sendResponse({ type: 'content is ok' })
+    if (appState) {
+      store.setState(appState)
+    }
+
+    sendResponse(true)
   }
-);
 
-document.addEventListener('mouseup', (evt) => {
-  const selection = document.getSelection()
- 
-  if (selection.type === 'Range') {
-    const text = getHighlightText()
-    mouseInfo = getMouseInfo(evt)
-    
-    send({ q: text })
-  }
-})
-
-const getMouseInfo = (evt) => {
-  const { x, y } = evt
-
-  return {
-    left: x,
-    top: y,
-  } 
-}
-
-const getHighlightText = () => {
-  const selection = window.getSelection()
+  const handleMouseUp = (evt) => {
+    const selection = document.getSelection()
   
-  const {
-    anchorNode,
-    extentOffset,
-    anchorOffset,
-  } = selection
+    if (selection.type === 'Range') {
+      const { x, y } = evt
 
-  const {
-    textContent
-  } = anchorNode
+      store.setState({
+        left: x,
+        top: y,
+      })
+    }
+  }
 
-  const text = textContent.substring(
-    extentOffset,
-    anchorOffset
+  console.log('loading content.js...')
+
+  rejectModal()
+
+  chrome.runtime.sendMessage(
+    { type: CONTENT_LOAD },
+    function() {
+      const err = chrome.runtime.lastError
+
+      if (err) {
+        console.log('[content] error', JSON.stringify(err))
+      }
+    }
   )
 
-  return text
+  chrome.runtime.onMessage.addListener(onRuntimeMessage)
+
+  document.addEventListener('mouseup', handleMouseUp)
 }
 
-// 通信
-const send = (payload) => {
-  // console.log('[background-send] ', payload)
-  chrome.runtime.sendMessage(payload)
-}
-
-const createUI = () => {
-  const modalWrap = document.createElement('div')
-  modalWrap.id = "fanyi-modal"
-  modalWrap.innerHTML = createModal('loading...')
-
-  document.body.append(modalWrap)
-}
-
-createUI()
-
-// todo
-window.addEventListener('click', () => {
-  const el = document.getElementById('fanyi-modal')
-  el.style.display = 'none'
-})
+__main()

@@ -1,141 +1,90 @@
-import { md5 } from './utils'
+import {
+  COMMEND_ID,
+  CONTENT_LOAD,
+  TRANSLATE_START,
+  TRANSLATE_END,
+  TRANSLATE_ERROR,
+} from './action'
+import { createTranslateUrl } from './baidu-setup'
 
-const main = () => {
-  const commandId = 'Translate'
+import { syncToDb } from './db'
 
-  chrome.contextMenus.create( {
-    title: commandId + ' "%s"',
-    id: commandId,
-    contexts: ['selection'],
-  })
+class Demo {
+  currentActiveTabId = null
 
-  let currentActiveTabId
+  constructor() {
+    chrome.contextMenus.create( {
+      title: COMMEND_ID + ' "%s"',
+      id: COMMEND_ID,
+      contexts: ['selection'],
+    })
 
-  // 通信
-  let LATEST_PAYLOAD = null
+    chrome.runtime.onMessage.addListener(
+      this.onRuntimeMessage.bind(this)
+    )
+    chrome.contextMenus.onClicked.addListener(
+      this.onContextMenusClick.bind(this)
+    )
+  }
 
-  chrome.runtime.onMessage.addListener((payload) => {
-    LATEST_PAYLOAD = payload
-  })
+  onRuntimeMessage(message, sender, sendResponse) {
+    switch (message.type) {
+      case CONTENT_LOAD:
+        const { tab: { id } } = sender
+        this.currentActiveTabId = id
+        break
+    }
 
-  chrome.contextMenus.onClicked.addListener((evt) => {
-    const { menuItemId } = evt
+    sendResponse(true)
+  }
 
-    if (!LATEST_PAYLOAD) return
-    // console.log({ menuItemId, LATEST_PAYLOAD })
-
-    if (menuItemId === 'Translate') {
-      const url = createTranslateUrl(LATEST_PAYLOAD.q)
-
-      sendMessage(currentActiveTabId, { type: 'translate-start' })
+  onContextMenusClick(evt) {
+    if (evt.menuItemId === COMMEND_ID) {
+      const doc = { text: evt.selectionText }
+      syncToDb(doc)
+      
+      const url = createTranslateUrl(evt.selectionText)
+      this.sendToActiveTab({ type: TRANSLATE_START })
 
       fetch(url)
         .then(res => res.json())
         .then(res => {
-          if (res.error_code === '54001') {
-            console.error('ERROR ', res.error_msg)
+          if (res.error_code === '54001' || res.error_code === '52003') {
+            console.log('ERROR ', res.error_msg)
             return
           }
 
           const { trans_result } = res
-          const [{ src, dst }] = trans_result
 
-          const msg = `${src}: ${dst}`
-          // notifications(msg)
-          sendMessage(currentActiveTabId, { type: 'translate', result: msg })
+          const p = {
+            type: TRANSLATE_END,
+            payload: trans_result[0]
+          }
+          this.sendToActiveTab(p)
         })
         .catch(err => {
           console.error(err)
+
+          this.sendToActiveTab({ type: TRANSLATE_ERROR })
         })
     }
-  })
+  }
 
-  chrome.runtime.onMessage.addListener(
-    function(request, sender) {
-      const { tab: { id } } = sender
-      currentActiveTabId = id
+  sendToActiveTab(payload) {
+    if (!this.currentActiveTabId) return
 
-      console.log(JSON.stringify(request))
-    }
-  );
+    chrome.tabs.sendMessage(
+      this.currentActiveTabId,
+      payload,
+      function() {
+        if (!chrome.runtime.lastError) {
+          console.log('error in chrome')
+        }
+      }
+    )
+  }
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
-  main()
+  new Demo()
 })
-
-const sendMessage = (tabId, payload) => {
-  if (!tabId) return
-
-  chrome.tabs.sendMessage(
-    tabId,
-    payload,
-    function(response) {
-      if (!chrome.runtime.lastError) {
-        console.log('[background] send ok, response ok ' + JSON.stringify(response))
-      } else {
-        console.log('[background] send ok, response not ok')
-      }
-    }
-  )
-}
-
-const notifications = (msg) => {
-  const notificationPayload = {
-    title: 'test',
-    type: 'basic',
-    // todo
-    message: msg || 'test message',
-    iconUrl: 'icon.png',
-    requireInteraction: false,
-  }
-  chrome.notifications.create(notificationPayload)
-}
-
-const BAIDU_URL = 'https://fanyi-api.baidu.com/api/trans/vip/translate'
-const APP_ID = '20220801001290121'
-const KEY = 'yDr87UOd8xxpPYC0JjES'
-
-const createTranslateUrl = (q) => {
-  const url = BAIDU_URL
-
-  const salt = (new Date).getTime()
-  const sign = toSign(q, salt)
-
-  const params = {
-    q,
-    from: 'en',
-    to: 'zh',
-    appid: APP_ID,
-    salt,
-    sign,
-  }
-
-  const finalUrl = append(url, params)
-  
-  return finalUrl
-}
-
-const toSign = (q, salt) => {
-  const s = `${APP_ID}${q}${salt}${KEY}`
-
-  return md5(s)
-}
-
-const append = (url, params) => {
-  const qIdx = url.indexOf('?')
-  if (qIdx === -1) {
-    url = `${url}?`
-  }
-
-  return Object.keys(params).reduce((accu, next, idx) => {
-    const value = params[next]
-    const preFix = idx === 0 ? '' : '&'
-
-    accu += `${preFix}${next}=${value}`
-
-    return accu
-  }, url)
-}
-
-// https://developer.chrome.com/docs/extensions/reference/action/
