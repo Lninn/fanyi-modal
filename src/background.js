@@ -19,8 +19,10 @@ function sendToActiveTab(payload) {
     currentActiveTabId,
     payload,
     function() {
-      if (!chrome.runtime.lastError) {
-        console.log('error in chrome')
+      const err = chrome.runtime.lastError
+
+      if (err) {
+        console.log('[background] error ' + JSON.stringify(err))
       }
     }
   )
