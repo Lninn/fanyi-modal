@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack')
 const CopyPlugin = require("copy-webpack-plugin")
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 require('dotenv').config({ path: './.env' })
 
@@ -18,7 +17,8 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: outputPath,
-    libraryTarget: "umd"
+    libraryTarget: "umd",
+    clean: true,
   },
   optimization: {
     minimize: false,
@@ -56,12 +56,6 @@ module.exports = {
       patterns: [
         { from: path.resolve(__dirname, 'asset') },
       ],
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Popup page',
-      filename: 'popup.html',
-      chunks: ['popup'],
-      minify: false,
     }),
   ]
 };
