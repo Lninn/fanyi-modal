@@ -8,7 +8,7 @@ import './popup.less'
 
 console.log('popup.js loading...')
 
-const App = () => {
+export const useSource = () => {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -19,19 +19,15 @@ const App = () => {
     }).finally(() => setLoading(false))
   }, [])
 
+  return [data, loading]
+}
+
+const App = () => {
+  const [dataSource, loading] = useSource()
+
   return (
     <div className="popup">
-      {loading ? (
-        <div>content is loading...</div>
-      ): null}
-
-      {!loading ? (
-        data.map((d, idx) => {
-          return (
-            <div key={idx}>{d.text}</div>
-          )
-        })
-      ) : null}
+      <List dataSource={dataSource} loading={loading} />
     </div>
   );
 }
@@ -40,3 +36,40 @@ let rootDom = document.getElementById('app')
 
 const root = ReactDOM.createRoot(rootDom)
 root.render(<App />)
+
+const List = (props) => {
+  const { dataSource, loading } = props
+
+  const bodyContent = dataSource.map(
+    (datum, idx) => {
+      return (
+        <tr key={idx}>
+          <td>{idx}</td>
+          <td>{datum.text}</td>
+        </tr>
+      )
+    }
+  )
+
+  if (loading) {
+    return (
+      <div>
+        loading...
+      </div>
+    )
+  }
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Text</th>
+        </tr>
+      </thead>
+      <tbody>
+        {bodyContent}
+      </tbody>
+    </table>
+  )
+}
