@@ -27,13 +27,15 @@ class Demo {
     )
   }
 
-  onRuntimeMessage(message, sender) {
+  onRuntimeMessage(message, sender, sendResponse) {
     switch (message.type) {
       case CONTENT_LOAD:
         const { tab: { id } } = sender
         this.currentActiveTabId = id
         break
     }
+
+    sendResponse(true)
   }
 
   onContextMenusClick(evt) {

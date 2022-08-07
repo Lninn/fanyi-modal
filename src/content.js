@@ -49,11 +49,20 @@ const __main = () => {
     }
   }
 
-  console.log('log from content.js...')
+  console.log('loading content.js...')
 
   rejectModal()
 
-  chrome.runtime.sendMessage({ type: CONTENT_LOAD })
+  chrome.runtime.sendMessage(
+    { type: CONTENT_LOAD },
+    function() {
+      const err = chrome.runtime.lastError
+
+      if (err) {
+        console.log('[content] error', JSON.stringify(err))
+      }
+    }
+  )
 
   chrome.runtime.onMessage.addListener(onRuntimeMessage)
 
