@@ -7,6 +7,7 @@ import {
 } from './action'
 import { createTranslateUrl } from './baidu-setup'
 
+import { syncToDb } from './db'
 
 class Demo {
   currentActiveTabId = null
@@ -37,21 +38,27 @@ class Demo {
 
   onContextMenusClick(evt) {
     if (evt.menuItemId === COMMEND_ID) {
+      const doc = { text: evt.selectionText }
+      syncToDb(doc)
+      
       const url = createTranslateUrl(evt.selectionText)
-
       this.sendToActiveTab({ type: TRANSLATE_START })
 
       fetch(url)
         .then(res => res.json())
         .then(res => {
-          if (res.error_code === '54001') {
+          if (res.error_code === '54001' || res.error_code === '52003') {
             console.log('ERROR ', res.error_msg)
             return
           }
 
           const { trans_result } = res
 
-          this.sendToActiveTab({ type: TRANSLATE_END, payload: trans_result[0] })
+          const p = {
+            type: TRANSLATE_END,
+            payload: trans_result[0]
+          }
+          this.sendToActiveTab(p)
         })
         .catch(err => {
           console.error(err)
