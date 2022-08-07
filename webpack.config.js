@@ -6,6 +6,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 require('dotenv').config({ path: './.env' })
 
 
+const outputPath = path.resolve(__dirname, 'build')
+
 module.exports = {
   mode: "production",
   entry: {
@@ -15,7 +17,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'extension'),
+    path: outputPath,
     libraryTarget: "umd"
   },
   optimization: {
