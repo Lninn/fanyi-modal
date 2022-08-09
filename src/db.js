@@ -22,11 +22,11 @@ const getUser = async () => {
   return user
 }
 
-export const syncToDb = async (doc) => {
+export const saveWord = async (doc) => {
   try {
     const user = await getUser()
 
-    await user.functions.addWord(doc);
+    await user.functions.saveWord(doc);
   } catch (err) {
     console.error(err)
   }
@@ -36,7 +36,7 @@ export const queryWords = async () => {
   try {
     const user = await getUser()
 
-    const result = await user.functions.getWords();
+    const result = await user.functions.queryWords();
     
     return result
   } catch (err) {

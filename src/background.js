@@ -6,8 +6,7 @@ import {
   TRANSLATE_ERROR,
 } from './action'
 import { createTranslateUrl } from './baidu-setup'
-
-import { syncToDb } from './db'
+import { saveWord } from './db'
 
 
 let currentActiveTabId = null
@@ -38,9 +37,6 @@ chrome.runtime.onInstalled.addListener(async () => {
   chrome.contextMenus.onClicked.addListener(
     function(evt) {
       if (evt.menuItemId === COMMEND_ID) {
-        const doc = { text: evt.selectionText }
-        syncToDb(doc)
-        
         const url = createTranslateUrl(evt.selectionText)
         sendToActiveTab({ type: TRANSLATE_START })
     
@@ -59,6 +55,11 @@ chrome.runtime.onInstalled.addListener(async () => {
               payload: trans_result[0]
             }
             sendToActiveTab(p)
+            saveWord({
+              from: p.payload.src,
+              to: p.payload.dst,
+              created_at: new Date().getTime()
+            })
           })
           .catch(err => {
             console.error(err)

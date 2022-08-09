@@ -45,7 +45,9 @@ const List = (props) => {
       return (
         <tr key={idx}>
           <td>{idx}</td>
-          <td>{datum.text}</td>
+          <td>{datum.from}</td>
+          <td>{datum.to}</td>
+          <td>{datum.count}</td>
         </tr>
       )
     }
@@ -64,7 +66,9 @@ const List = (props) => {
       <thead>
         <tr>
           <th>Index</th>
-          <th>Text</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Times</th>
         </tr>
       </thead>
       <tbody>
