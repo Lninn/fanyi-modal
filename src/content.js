@@ -5,12 +5,15 @@ import {
   TRANSLATE_ERROR,
 } from './action'
 import { rejectModal, store } from './Modal.jsx'
+import { debug } from './utils'
 
 
 const __main = () => {
 
   const onRuntimeMessage = (request, _, sendResponse) => {
     let appState
+
+    debug('content ', request.type)
 
     if (request.type === TRANSLATE_START) {
       appState = {

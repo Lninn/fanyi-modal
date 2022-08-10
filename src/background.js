@@ -7,24 +7,37 @@ import {
 } from './action'
 import { createTranslateUrl } from './baidu-setup'
 import { saveWord } from './db'
+import { debug } from './utils'
 
 
-let currentActiveTabId = null
+const getCurrentTabId = async () => {
+  const queryInfo = {
+    active: true,
+    currentWindow: true,
+  }
 
-function sendToActiveTab(payload) {
-  if (!currentActiveTabId) return
+  const tabs = await chrome.tabs.query(queryInfo)
 
-  chrome.tabs.sendMessage(
-    currentActiveTabId,
-    payload,
-    function() {
-      const err = chrome.runtime.lastError
+  const [tab] = tabs
 
-      if (err) {
-        console.log('[background] error ' + JSON.stringify(err))
-      }
-    }
-  )
+  if (tab) {
+    return tab.id
+  } else {
+    return null
+  }
+}
+
+const syncToCurrentTab = async (payload) => {
+  const id = await getCurrentTabId()
+
+  if (!id) return
+
+  try {
+    const result = await chrome.tabs.sendMessage(id, payload)
+    debug('syncToCurrentTab ', result)
+  } catch(err) {
+    debug('syncToCurrentTab', err)
+  }
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
@@ -33,50 +46,51 @@ chrome.runtime.onInstalled.addListener(async () => {
     id: COMMEND_ID,
     contexts: ['selection'],
   })
-  
-  chrome.contextMenus.onClicked.addListener(
-    function(evt) {
-      if (evt.menuItemId === COMMEND_ID) {
-        const url = createTranslateUrl(evt.selectionText)
-        sendToActiveTab({ type: TRANSLATE_START })
-    
-        fetch(url)
-          .then(res => res.json())
-          .then(res => {
-            if (res.error_code === '54001' || res.error_code === '52003') {
-              console.log('ERROR ', res.error_msg)
-              return
-            }
-    
-            const { trans_result } = res
-    
-            const p = {
-              type: TRANSLATE_END,
-              payload: trans_result[0]
-            }
-            sendToActiveTab(p)
-            saveWord({
-              from: p.payload.src,
-              to: p.payload.dst,
-              created_at: new Date().getTime()
-            })
-          })
-          .catch(err => {
-            console.error(err)
-    
-            sendToActiveTab({ type: TRANSLATE_ERROR })
-          })
-      }
-    }
-  )
 })
 
+chrome.contextMenus.onClicked.addListener(
+  function(evt) {
+    if (evt.menuItemId === COMMEND_ID) {
+      debug('context click ', COMMEND_ID)
+
+      const url = createTranslateUrl(evt.selectionText)
+      syncToCurrentTab({ type: TRANSLATE_START })
+  
+      fetch(url)
+        .then(res => res.json())
+        .then(res => {
+          if (res.error_code === '54001' || res.error_code === '52003') {
+            console.log('ERROR ', res.error_msg)
+            return
+          }
+  
+          const { trans_result } = res
+  
+          const p = {
+            type: TRANSLATE_END,
+            payload: trans_result[0]
+          }
+          syncToCurrentTab(p)
+          saveWord({
+            from: p.payload.src,
+            to: p.payload.dst,
+            created_at: new Date().getTime()
+          })
+        })
+        .catch(err => {
+          console.error(err)
+  
+          syncToCurrentTab({ type: TRANSLATE_ERROR })
+        })
+    }
+  }
+)
+
 chrome.runtime.onMessage.addListener(
-  function(message, sender, sendResponse) {
+  function(message, _, sendResponse) {
     switch (message.type) {
       case CONTENT_LOAD:
-        const { tab: { id } } = sender
-        currentActiveTabId = id
+        debug('content.js is load ')
         break
     }
 
