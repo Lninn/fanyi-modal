@@ -1,0 +1,26 @@
+{
+  "name": "my-extension",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "contextMenus",
+    "notifications"
+  ],
+  "host_permissions": [
+    "http://api.fanyi.baidu.com/"
+  ],
+  "action": {
+    "default_title": "My Bookmarks",
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
