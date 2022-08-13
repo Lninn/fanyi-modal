@@ -8,7 +8,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        background: path.resolve(__dirname, 'src/background.ts')
+        background: path.resolve(__dirname, 'src/background.ts'),
+        content: path.resolve(__dirname, 'src/content.ts'),
       }
     }
   }
