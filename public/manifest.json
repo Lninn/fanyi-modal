@@ -1,9 +1,9 @@
 {
-  "name": "my-extension",
+  "name": "fanyi",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
-    "service_worker": "/src/background.js"
+    "service_worker": "background.js"
   },
   "permissions": [
     "contextMenus",
@@ -20,7 +20,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["/src/content.js"]
+      "js": ["content.js"]
     }
   ]
 }
