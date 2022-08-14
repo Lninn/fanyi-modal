@@ -13,6 +13,11 @@ export default defineConfig({
         background: path.resolve(__dirname, 'src/background.ts'),
         content: path.resolve(__dirname, 'src/content.ts'),
       },
+      output: {
+        entryFileNames() {
+          return '[name].js'
+        },
+      }
     }
   }
 })
