@@ -1,6 +1,5 @@
 import './TranslateApp.less'
 
-import cls from 'classnames'
 import {
   ActionType,
   IAction,
@@ -9,6 +8,48 @@ import {
 } from '@/type'
 import React from 'react'
 
+
+interface CommandCtor {
+  new(): ICommand
+}
+
+const commandList: ICommand[] = []
+
+const makeCommand = (ctor: CommandCtor) => {
+  return new ctor()
+}
+
+interface ICommand {
+  handle: () => void
+}
+
+class CopyCommand implements ICommand {
+  handle() {
+    console.log('copy command')
+  }
+}
+
+class PlayCommand implements ICommand {
+  handle() {
+    console.log('play command')
+  }
+}
+
+class CollectCommand implements ICommand {
+  handle() {
+    console.log('collect command')
+  }
+}
+
+commandList.push(
+  ...[
+    makeCommand(CopyCommand),
+    makeCommand(PlayCommand),
+    makeCommand(CollectCommand),
+  ]
+)
+
+console.log(commandList)
 
 const copyTextToClip = (text?: string) => {
   console.log('copy text ', text)
@@ -71,25 +112,23 @@ const TranslateApp = ({
   source,
   target
 }: TranslateAppProps) => {
-  const wrapCls = cls(
-    `${CLS_REEFIX}-modal`
-  )
-
   return (
-    <div className={wrapCls}>
-      <div className={`${CLS_REEFIX}-header`}>
-        <div className={`${CLS_REEFIX}-header-language`}>
+    <div className={`${CLS_REEFIX}-modal`}>
+      <div className={`${CLS_REEFIX}-modal-header`}>
+        <div className={`${CLS_REEFIX}-modal-header-language`}>
           CN - EN
         </div>
-        <div className={`${CLS_REEFIX}-header-operate`}>
+        <div className={`${CLS_REEFIX}-modal-header-operate`}>
           <span>切换主题</span>
         </div>
       </div>
-      <div className={`${CLS_REEFIX}-content`}>
+      <div className={`${CLS_REEFIX}-modal-content`}>
         <DocumentView 
           doc={source}
           actions={[{ type:'collect' }, { type: 'sound' }]}
         />
+
+        <div className={`${CLS_REEFIX}-document-line`} />
 
         <DocumentView
           doc={target}
@@ -114,7 +153,7 @@ const DocumentView = ({
   const renderAction = (action: IAction) => {
     return (
       <div
-        className={`${CLS_REEFIX}-document-action`}
+        className={`${CLS_REEFIX}-document-operate-action`}
         onClick={() => onCommand(action.type)}
       >
         Action

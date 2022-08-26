@@ -1,5 +1,59 @@
 @prefix: test-app;
 
 .@{prefix}-modal {
-  background-color: aqua;
+  font-size: 14px;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  
+  max-width: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  &-header {
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+
+    display: flex;
+
+    &-operate {
+      margin-left: auto;
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+
+    padding: 12px;
+  }
+}
+
+.@{prefix}-document {
+  
+  &-line {
+    height: 1px;
+    background-color: #e5e5e5;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  &-text {
+    min-height: 45px;
+  }
+
+  &-operate {
+    margin-top: 8px;
+
+    display: flex;
+
+    &-action {
+      & + & {
+        margin-left: 8px;
+      }
+    }
+  }
 }
