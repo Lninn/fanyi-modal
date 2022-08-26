@@ -1,13 +1,9 @@
-import TranslateApp from './components/TranslateApp'
+import TranslateModal from './components/TranslateModal'
 
 function App() {
   return (
     <div className="App">
-
-      <TranslateApp>
-        hello world
-      </TranslateApp>
-
+      <TranslateModal />
     </div>
   )
 }

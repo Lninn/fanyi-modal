@@ -1,50 +1,19 @@
 import './TranslateApp.less'
 
 import {
-  ActionType,
   IAction,
   IActions,
   IDocument
 } from '@/type'
 import React from 'react'
-import { createDoc } from '@/Document'
 
 import copySvg from '@/assets/copy.svg'
 import saveSvg from '@/assets/save.svg'
 import volume from '@/assets/volume.svg'
 import themeSvg from '@/assets/theme.svg'
 import doubleArrowSvg from '@/assets/double-arrow.svg'
+import { TranslateContext } from './TranslateModal'
 
-
-const copyTextToClip = (text?: string) => {
-  console.log('copy text ', text)
-}
-
-const playSound = (text?: string) => {
-  console.log('play sound ', text)
-}
-
-const collectWord = (text?: string) => {
-  console.log('collect word ', text)
-}
-
-type ITranslateContext = {
-  onCommand: (type: ActionType, text?: string) => void
-}
-
-const handleCommand = (type: ActionType, text?: string) => {
-  switch (type) {
-    case 'collect':
-      collectWord(text)
-      break
-    case 'copy':
-      copyTextToClip(text)
-      break
-    case 'sound':
-      playSound(text)
-      break
-  }
-}
 
 const SOURCE_ACTIONS: IActions = [
   {
@@ -71,26 +40,6 @@ const TARGET_ACTIONS: IActions = [
     url: volume,
   }
 ]
-
-const initialTranslateContext: ITranslateContext = {
-  onCommand: handleCommand,
-}
-
-const TranslateContext = React.createContext(initialTranslateContext)
-
-const TranslateProvider = ({
-  children
-}: {
-  children: React.ReactNode
-}) => {
-  const [context] = React.useState(initialTranslateContext)
-
-  return (
-    <TranslateContext.Provider value={context}>
-      {children}
-    </TranslateContext.Provider>
-  )
-}
 
 interface TranslateAppProps {
   source: IDocument
@@ -178,22 +127,4 @@ const DocumentView = ({
   )
 }
 
-export const TranslateModal = () => {
-  const [source] = React.useState<IDocument>(
-    createDoc('cn')
-  )
-  const [target] = React.useState<IDocument>(
-    createDoc('en')
-  )
-
-  return (
-    <TranslateProvider>
-      <TranslateApp
-        source={source}
-        target={target}
-      />
-    </TranslateProvider>
-  )
-}
-
-export default TranslateModal
+export default TranslateApp
