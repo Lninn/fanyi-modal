@@ -143,7 +143,7 @@ async function sendToActiveTab(message: any) {
   try {
     const result = await chrome.tabs.sendMessage(activeId, message)
     console.log('[sendToActiveTab] ', result)
-  } catch (error) {
-    console.error('[sendToActiveTab] ', error)
+  } catch (error: any) {
+    console.log('[sendToActiveTab] ', error.message)
   }
 }

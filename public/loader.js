@@ -1,5 +1,6 @@
 (async () => {
+  console.log('loader.js...')
+
   const src = chrome.runtime.getURL("content.js");
-  const contentMain = await import(src);
-  contentMain.main();
+  await import(src);
 })();

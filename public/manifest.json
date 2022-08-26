@@ -8,17 +8,25 @@
   },
   "permissions": [
     "contextMenus",
-    "notifications",
-    "webRequest"
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://fanyi-api.baidu.com/*"
   ],
   "action": {
     "default_title": "My Bookmarks",
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["loader.js"]
+    }
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["content_load.js"],
+      "resources": ["content.js", "assets/*.js"],
       "matches": ["<all_urls>"]
     }
   ]
