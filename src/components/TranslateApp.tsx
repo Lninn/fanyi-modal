@@ -7,6 +7,7 @@ import {
   IDocument
 } from '@/type'
 import React from 'react'
+import { createDoc } from '@/Document'
 
 
 interface CommandCtor {
@@ -176,8 +177,12 @@ const DocumentView = ({
 }
 
 export const TranslateModal = () => {
-  const [source] = React.useState<IDocument>({ lang: 'en', text: 'hello,world' })
-  const [target] = React.useState<IDocument>({ lang: 'cn', text: '你好，世界' })
+  const [source] = React.useState<IDocument>(
+    createDoc('cn')
+  )
+  const [target] = React.useState<IDocument>(
+    createDoc('en')
+  )
 
   return (
     <TranslateProvider>
