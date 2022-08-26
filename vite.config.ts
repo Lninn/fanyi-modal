@@ -15,6 +15,7 @@ export default defineConfig({
         content: path.resolve(__dirname, 'src/content.ts'),
       },
       output: {
+        sourcemap: 'inline',
         entryFileNames() {
           return '[name].js'
         },
