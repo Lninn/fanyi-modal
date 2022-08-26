@@ -72,7 +72,7 @@ async function handleTranslateClick(queryText: string) {
   const url = createTranslateUrl(queryText)
   const result = await baiduQuery(url)
 
-  if (!result.length) {
+  if (!result || !result?.length) {
     return
   }
 
