@@ -9,48 +9,12 @@ import {
 import React from 'react'
 import { createDoc } from '@/Document'
 
+import copySvg from '@/assets/copy.svg'
+import saveSvg from '@/assets/save.svg'
+import volume from '@/assets/volume.svg'
+import themeSvg from '@/assets/theme.svg'
+import doubleArrowSvg from '@/assets/double-arrow.svg'
 
-interface CommandCtor {
-  new(): ICommand
-}
-
-const commandList: ICommand[] = []
-
-const makeCommand = (ctor: CommandCtor) => {
-  return new ctor()
-}
-
-interface ICommand {
-  handle: () => void
-}
-
-class CopyCommand implements ICommand {
-  handle() {
-    console.log('copy command')
-  }
-}
-
-class PlayCommand implements ICommand {
-  handle() {
-    console.log('play command')
-  }
-}
-
-class CollectCommand implements ICommand {
-  handle() {
-    console.log('collect command')
-  }
-}
-
-commandList.push(
-  ...[
-    makeCommand(CopyCommand),
-    makeCommand(PlayCommand),
-    makeCommand(CollectCommand),
-  ]
-)
-
-console.log(commandList)
 
 const copyTextToClip = (text?: string) => {
   console.log('copy text ', text)
@@ -65,25 +29,51 @@ const collectWord = (text?: string) => {
 }
 
 type ITranslateContext = {
-  onCommand: (type: ActionType) => void
+  onCommand: (type: ActionType, text?: string) => void
 }
 
-const handleCommand = (type: ActionType) => {
+const handleCommand = (type: ActionType, text?: string) => {
   switch (type) {
     case 'collect':
-      collectWord()  
+      collectWord(text)
       break
     case 'copy':
-      copyTextToClip()
+      copyTextToClip(text)
       break
     case 'sound':
-      playSound()
+      playSound(text)
       break
   }
 }
 
+const SOURCE_ACTIONS: IActions = [
+  {
+    type: 'collect',
+    desc: '收藏',
+    url: saveSvg
+  },
+  {
+    type: 'sound',
+    desc: '声音',
+    url: volume,
+  },
+];
+
+const TARGET_ACTIONS: IActions = [
+  {
+    type: 'copy',
+    desc: '复制',
+    url: copySvg,
+  },
+  {
+    type: 'sound',
+    desc: '声音',
+    url: volume,
+  }
+]
+
 const initialTranslateContext: ITranslateContext = {
-  onCommand: handleCommand
+  onCommand: handleCommand,
 }
 
 const TranslateContext = React.createContext(initialTranslateContext)
@@ -117,23 +107,33 @@ const TranslateApp = ({
     <div className={`${CLS_REEFIX}-modal`}>
       <div className={`${CLS_REEFIX}-modal-header`}>
         <div className={`${CLS_REEFIX}-modal-header-language`}>
-          CN - EN
+          <span className={`${CLS_REEFIX}-modal-header-language-text`}>
+            中文
+          </span>
+          <span className={`${CLS_REEFIX}-modal-header-language-icon`}>
+            <img className={`${CLS_REEFIX}-img`} src={doubleArrowSvg} />
+          </span>
+          <span className={`${CLS_REEFIX}-modal-header-language-text`}>
+            英文
+          </span>
         </div>
         <div className={`${CLS_REEFIX}-modal-header-operate`}>
-          <span>切换主题</span>
+          <span title='切换主题'>
+            <img className={`${CLS_REEFIX}-img`} src={themeSvg} />
+          </span>
         </div>
       </div>
       <div className={`${CLS_REEFIX}-modal-content`}>
         <DocumentView 
           doc={source}
-          actions={[{ type:'collect' }, { type: 'sound' }]}
+          actions={SOURCE_ACTIONS}
         />
 
         <div className={`${CLS_REEFIX}-document-line`} />
 
         <DocumentView
           doc={target}
-          actions={[{ type: 'copy' }, { type: 'sound' }]}
+          actions={TARGET_ACTIONS}
         />
       </div>
     </div>
@@ -155,9 +155,11 @@ const DocumentView = ({
     return (
       <div
         className={`${CLS_REEFIX}-document-operate-action`}
-        onClick={() => onCommand(action.type)}
+        onClick={() => onCommand(action.type, doc.text)}
+        key={action.type}
+        title={action.desc}
       >
-        Action
+        <img className={`${CLS_REEFIX}-img`} src={action.url} />
       </div>
     )
   }

@@ -18,6 +18,20 @@
 
     display: flex;
 
+    &-language {
+      display: inline-flex;
+      align-items: center;
+
+      &-icon {
+        margin-left: 12px;
+        margin-right: 12px;
+
+        img {
+          width: 12px;
+        }
+      }
+    }
+
     &-operate {
       margin-left: auto;
     }
@@ -37,8 +51,8 @@
     height: 1px;
     background-color: #e5e5e5;
 
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 16px;
+    margin-bottom: 9px;
   }
 
   &-text {
@@ -51,9 +65,23 @@
     display: flex;
 
     &-action {
+      line-height: 0;
+
       & + & {
         margin-left: 8px;
       }
     }
+  }
+}
+
+.@{prefix}-img {
+  width: 14px;
+  max-width: 100%;
+  opacity: .7;
+
+  cursor: pointer;
+
+  &:hover {
+    opacity: .415;
   }
 }
