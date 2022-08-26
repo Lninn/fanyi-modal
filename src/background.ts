@@ -82,11 +82,11 @@ async function handleTranslateClick(queryText: string) {
     type: TRANSLATE_END,
     payload: item,
   })
-  saveWord({
-    from: item.src,
-    to: item.dst,
-    created_at: new Date().getTime(),
-  })
+  // saveWord({
+  //   from: item.src,
+  //   to: item.dst,
+  //   created_at: new Date().getTime(),
+  // })
 }
 
 async function baiduQuery(url: string) {
