@@ -1,7 +1,13 @@
+import TranslateApp from './components/TranslateApp'
+
 function App() {
   return (
     <div className="App">
-      hello world
+
+      <TranslateApp>
+        hello world
+      </TranslateApp>
+
     </div>
   )
 }

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import { queryWords } from '@/service'
 
+import { query } from '@/service/mock'
+
 
 console.log('popup.js loading...')
 
@@ -13,9 +15,11 @@ export const useSource = () => {
 
   useEffect(() => {
     setLoading(true)
-    queryWords().then(res => {
-      setData(res);
-    }).finally(() => setLoading(false))
+    query().then(
+      result => {
+        console.log('result ', result)
+      }
+    ).finally(() => setLoading(false))
   }, [])
 
   return [data, loading] as const
@@ -23,6 +27,10 @@ export const useSource = () => {
 
 const App = () => {
   const [dataSource, loading] = useSource()
+
+  useEffect(() => {
+    console.log('[App] mounted')
+  }, [])
 
   return (
     <div className="popup">
@@ -79,7 +87,5 @@ const List = (props: IList) => {
 
 const root = document.getElementById('root') as HTMLElement
 ReactDOM.createRoot(root).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
 )

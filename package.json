@@ -16,6 +16,7 @@
     "realm-web": "^1.7.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.4.0",
     "@types/chrome": "^0.0.193",
     "@types/node": "^18.7.2",
     "@types/react": "^18.0.17",
