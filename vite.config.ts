@@ -4,6 +4,7 @@ import path from 'path';
 
 
 // https://vitejs.dev/config/
+
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -12,7 +13,7 @@ export default defineConfig({
         main: path.resolve(__dirname, 'index.html'),
         popup: path.resolve(__dirname, 'popup.html'),
         background: path.resolve(__dirname, 'src/background.ts'),
-        content: path.resolve(__dirname, 'src/content.ts'),
+        content: path.resolve(__dirname, 'src/content.tsx'),
       },
       output: {
         sourcemap: 'inline',

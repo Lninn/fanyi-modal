@@ -7,24 +7,25 @@ import {
 } from '@/type'
 import React from 'react'
 
-import copySvg from '@/assets/copy.svg'
-import saveSvg from '@/assets/save.svg'
-import volume from '@/assets/volume.svg'
-import themeSvg from '@/assets/theme.svg'
-import doubleArrowSvg from '@/assets/double-arrow.svg'
-import { TranslateContext } from './TranslateModal'
+import CopyIcon from '../assets/copy';
+import CollectIcon from '../assets/collect'
+import ArrowIcon from '../assets/arrow'
+import VolumeIcon from '../assets/volume'
+import ThemeIcon from '../assets/theme'
+
+import { TranslateContext } from './TranslateModal';
 
 
 const SOURCE_ACTIONS: IActions = [
   {
     type: 'collect',
     desc: '收藏',
-    url: saveSvg
+    icon: <CollectIcon />
   },
   {
     type: 'sound',
     desc: '声音',
-    url: volume,
+    icon: <VolumeIcon />,
   },
 ];
 
@@ -32,12 +33,12 @@ const TARGET_ACTIONS: IActions = [
   {
     type: 'copy',
     desc: '复制',
-    url: copySvg,
+    icon: <CopyIcon />,
   },
   {
     type: 'sound',
     desc: '声音',
-    url: volume,
+    icon: <VolumeIcon />,
   }
 ]
 
@@ -60,7 +61,7 @@ const TranslateApp = ({
             中文
           </span>
           <span className={`${CLS_REEFIX}-modal-header-language-icon`}>
-            <img className={`${CLS_REEFIX}-img`} src={doubleArrowSvg} />
+            <ArrowIcon />
           </span>
           <span className={`${CLS_REEFIX}-modal-header-language-text`}>
             英文
@@ -68,7 +69,7 @@ const TranslateApp = ({
         </div>
         <div className={`${CLS_REEFIX}-modal-header-operate`}>
           <span title='切换主题'>
-            <img className={`${CLS_REEFIX}-img`} src={themeSvg} />
+            <ThemeIcon />
           </span>
         </div>
       </div>
@@ -108,7 +109,7 @@ const DocumentView = ({
         key={action.type}
         title={action.desc}
       >
-        <img className={`${CLS_REEFIX}-img`} src={action.url} />
+        {action.icon}
       </div>
     )
   }

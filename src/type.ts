@@ -9,7 +9,7 @@ export type ActionType = 'collect' | 'sound' | 'copy'
 
 export interface IAction {
   type: ActionType
-  url: string
+  icon: JSX.Element
   desc: string
 }
 
