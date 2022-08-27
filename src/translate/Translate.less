@@ -24,18 +24,20 @@
       display: inline-flex;
       align-items: center;
 
+      margin-right: 24px;
+
       &-icon {
         margin-left: 12px;
         margin-right: 12px;
-
-        img {
-          width: 12px;
-        }
       }
     }
 
     &-operate {
       margin-left: auto;
+
+      &-action {
+        cursor: pointer;
+      }
     }
   }
 
@@ -69,22 +71,12 @@
     &-action {
       line-height: 0;
 
+      cursor: pointer;
+
       & + & {
         margin-left: 8px;
       }
     }
-  }
-}
-
-.@{prefix}-img {
-  width: 14px;
-  max-width: 100%;
-  opacity: .7;
-
-  cursor: pointer;
-
-  &:hover {
-    opacity: .415;
   }
 }
 

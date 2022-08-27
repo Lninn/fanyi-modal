@@ -1,8 +1,5 @@
-import { TranslateAppState } from "@/content"
-import { createDoc } from "@/Document"
-import { ActionType, IDocument } from "@/type"
-import React, { CSSProperties } from "react"
-import TranslateApp from "./TranslateApp"
+import { ActionType } from "@/type"
+import React from "react"
 
 
 const copyTextToClip = (text?: string) => {
@@ -41,7 +38,7 @@ const initialTranslateContext: ITranslateContext = {
 
 export const TranslateContext = React.createContext(initialTranslateContext)
 
-const TranslateProvider = ({
+export const TranslateProvider = ({
   children
 }: {
   children: React.ReactNode
@@ -54,33 +51,3 @@ const TranslateProvider = ({
     </TranslateContext.Provider>
   )
 }
-
-const TranslateModal = ({
-  appState,
-  style
-}: {
-  appState: TranslateAppState
-  style: CSSProperties,
-}) => {
-  const source: IDocument = {
-    lang: 'cn',
-    text: appState.src
-  }
-  
-  const target: IDocument = {
-    lang: 'en',
-    text: appState.dst
-  }
-
-  return (
-    <TranslateProvider>
-      <TranslateApp
-        source={source}
-        target={target}
-        style={style}
-      />
-    </TranslateProvider>
-  )
-}
-
-export default TranslateModal

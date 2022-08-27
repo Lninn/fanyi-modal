@@ -1,5 +1,3 @@
-import './TranslateApp.less'
-
 import {
   IAction,
   IActions,
@@ -12,8 +10,7 @@ import CollectIcon from '../assets/collect'
 import ArrowIcon from '../assets/arrow'
 import VolumeIcon from '../assets/volume'
 import ThemeIcon from '../assets/theme'
-
-import { TranslateContext } from './TranslateModal';
+import { TranslateContext } from './TranslateContext';
 
 
 const SOURCE_ACTIONS: IActions = [
@@ -70,7 +67,7 @@ const TranslateApp = ({
           </span>
         </div>
         <div className={`${CLS_REEFIX}-modal-header-operate`}>
-          <span title='切换主题'>
+          <span className={`${CLS_REEFIX}-modal-header-operate-action`} title='切换主题'>
             <ThemeIcon />
           </span>
         </div>

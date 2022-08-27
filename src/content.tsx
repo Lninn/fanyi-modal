@@ -5,7 +5,7 @@ import {
   IMessage
 } from './action'
 import { createStore, useStore } from './store'
-import TranslateModal from './components/TranslateModal'
+import Translate from './translate'
 
 
 console.log('content.js ...')
@@ -63,9 +63,7 @@ const App = () => {
   }
 
   return (
-    <div>
-      <TranslateModal style={style} appState={appState} />
-    </div>
+    <Translate style={style} appState={appState} />
   );
 }
 
