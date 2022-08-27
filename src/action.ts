@@ -1,9 +1,15 @@
-export const CONTENT_LOAD = 'CONTENT_LOAD'
+import { TransItem } from "./type"
 
-export const TRANSLATE_START = 'TRANSLATE_START'
 
-export const TRANSLATE_END = 'TRANSLATE_END'
 
-export const TRANSLATE_ERROR = 'TRANSLATE_ERROR'
+export type IMessage = {
+  type: 'start'
+} | {
+  type: 'end',
+  payload: TransItem
+} | {
+  type: 'error'
+}
 
-export const COMMEND_ID = 'Translate'
+
+export default {}

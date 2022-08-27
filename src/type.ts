@@ -14,3 +14,9 @@ export interface IAction {
 }
 
 export type IActions = IAction[]
+
+export type TransItem = {
+  src: string
+  dst: string
+}
+

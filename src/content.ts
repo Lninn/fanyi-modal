@@ -1,37 +1,31 @@
-console.log('content.js ...')
-
 import {
-  CONTENT_LOAD,
-  TRANSLATE_START,
-  TRANSLATE_END,
-  TRANSLATE_ERROR,
+  IMessage
 } from './action'
-import { rejectModal, store } from './Modal.js'
-import { debug } from './utils'
+import { rejectModal, store } from './Modal'
 
+
+console.log('content.js ...')
 
 const __main = () => {
 
   const onRuntimeMessage = (
-    request: any, 
+    message: IMessage, 
     _: any,
     sendResponse: (response: any) => void
   ) => {
     let appState
 
-    debug('content ', request.type)
-
-    if (request.type === TRANSLATE_START) {
+    if (message.type === 'start') {
       appState = {
         visible: true,
         loading: true,
       }
-    } else if (request.type === TRANSLATE_END) {
+    } else if (message.type === 'end') {
       appState = {
         loading: false,
-        ...request.payload,
+        ...message.payload,
       }
-    } else if (request.type === TRANSLATE_ERROR) {
+    } else if (message.type === 'error') {
       appState = {
         visible: false,
         loading: false,
@@ -41,6 +35,8 @@ const __main = () => {
     if (appState) {
       store.setState(appState)
     }
+
+    console.log('onRuntimeMessage ', appState)
 
     sendResponse(true)
   }
@@ -65,7 +61,7 @@ const __main = () => {
   rejectModal()
 
   chrome.runtime.sendMessage(
-    { type: CONTENT_LOAD },
+    { type: '123' },
     function() {
       const err = chrome.runtime.lastError
 

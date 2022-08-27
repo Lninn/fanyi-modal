@@ -50,3 +50,13 @@ export function md5(inputString: any) {
 export const debug = (...args: any[]) => {
   console.log(...args)
 }
+
+export const log = {
+  info(...args: any[]) {
+    console.log('[info] ', ...args)
+  },
+
+  err(...args: any[]) {
+    console.log('[err] ', ...args)
+  },
+}

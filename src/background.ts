@@ -1,14 +1,13 @@
-console.log('background.js ...')
-
-import {
-  COMMEND_ID,
-  CONTENT_LOAD,
-  TRANSLATE_START,
-  TRANSLATE_END,
-} from './action'
 import { createTranslateUrl } from './baidu'
 import { saveWord } from '@/service'
+import { log } from './utils'
+import { TransItem } from './type'
+import { IMessage } from './action'
 
+
+console.log('background.js ...')
+
+const COMMEND_ID = 'COMMEND_ID'
 
 main()
 
@@ -52,7 +51,7 @@ function handleRuntimeMessage(
   sendResponse: (response?: any) => void,
 ) {
   switch (message.type) {
-    case CONTENT_LOAD:
+    case '123':
       console.log('content.js is load')
       break
   }
@@ -66,42 +65,44 @@ async function handleTranslateClick(queryText: string) {
   }
 
   await sendToActiveTab({
-    type: TRANSLATE_START
+    type: 'start'
   })
 
   const url = createTranslateUrl(queryText)
-  const result = await baiduQuery(url)
+  const transItem = await baiduQuery(url)
 
-  if (!result || !result?.length) {
+  if (!transItem) {
     return
   }
 
-  const [item] = result
-
-  sendToActiveTab({
-    type: TRANSLATE_END,
-    payload: item,
+  await sendToActiveTab({
+    type: 'end',
+    payload: transItem,
   })
-  // saveWord({
-  //   from: item.src,
-  //   to: item.dst,
-  //   created_at: new Date().getTime(),
-  // })
+  await saveWord(transItem)
 }
 
 async function baiduQuery(url: string) {
   try {
-    const result = await fetch(url).then(r => r.json())
+    const {
+      error_code,
+      error_msg,
+      trans_result
+    } = await fetch(url).then(r => r.json())
 
-    if (result.error_code === '54001' || result.error_code === '52003') {
-      console.error('[baiduQuery] ', result.error_msg)
-      return
+    if (error_code === '54001' || error_code === '52003') {
+      log.err(error_msg)
+      return null
     }
 
-    return result.trans_result
-  } catch (error) {
-    console.error(error)
+    const item: TransItem | null = trans_result[0]
+
+    return item
+  } catch (err: any) {
+    log.err(err.message)
   }
+
+  return null
 }
 
 async function getActiveTab() {
@@ -133,7 +134,7 @@ async function getActiveTabId() {
   }
 }
 
-async function sendToActiveTab(message: any) {
+async function sendToActiveTab(message: IMessage) {
   const activeId = await getActiveTabId()
 
   if (!activeId) {
@@ -142,8 +143,9 @@ async function sendToActiveTab(message: any) {
 
   try {
     const result = await chrome.tabs.sendMessage(activeId, message)
-    console.log('[sendToActiveTab] ', result)
+
+    log.info('[sendToActiveTab] ' + result)
   } catch (error: any) {
-    console.log('[sendToActiveTab] ', error.message)
+    log.err('[sendToActiveTab] ' + error.message)
   }
 }

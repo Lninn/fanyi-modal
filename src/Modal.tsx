@@ -1,49 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import classnames from 'classnames'
+import { createStore, useStore } from './store'
 
 import './Modal.less'
 
 
-
-
-const createStore = (initialState: { visible: boolean; loading: boolean; left: number; top: number; src: string; dst: string }) => {
-  let state = initialState;
-  const getState = () => state;
-  const listeners = new Set<Function>();
-  const setState = (fn: any) => {
-
-    if (typeof fn === 'function') {
-      state = fn(state);
-    } else {
-      state = { ...state, ...fn };
-    }
-    
-    listeners.forEach((l) => l());
-  }
-
-  const subscribe = (listener: Function) => {
-    listeners.add(listener);
-    return () => listeners.delete(listener);
-  }
-
-  return {getState, setState, subscribe}
-}
-
-const useStore = (store: any) => {
-  return React.useSyncExternalStore(
-    store.subscribe,
-    React.useCallback(
-      () =>store.getState(),
-      [store],
-    )
-  )
-}
-
 const rootId = 'id-fanyi'
 
 const initialState = {
-  visible: false,
+  visible: true,
   loading: false,
 
   left: 0,
@@ -71,6 +37,7 @@ export const rejectModal = () => {
 
 const App = () => {
   const appState = useStore(store)
+  console.log('appState ', appState)
 
   const clsPrefix = 'fanyiModal'
   const cls = classnames(
