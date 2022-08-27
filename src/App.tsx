@@ -1,19 +1,10 @@
-import Modal from '@/components/Modal';
-import React from 'react';
-import { createDoc } from './Document';
+import History from './History'
+
+const CLS_REEFIX = 'TRANSLATE-APP'
 
 function App() {
-  const [visible, setVisible] = React.useState(false)
-
   return (
-    <Modal
-      clsPrefix='test' 
-      visible={visible} 
-      onCancel={() => setVisible(false)}
-      mask={true}
-    >
-      Hello
-    </Modal>
+    <History clsPrefix={CLS_REEFIX} />
   )
 }
 

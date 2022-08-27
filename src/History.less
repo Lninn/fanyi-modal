@@ -1,0 +1,41 @@
+@prefix: TRANSLATE-APP;
+
+.@{prefix} {
+  &-saveItem {
+    display: flex;
+    flex-direction: column;
+
+    border-top: 1px solid #e5e5e5;
+
+    & + & {
+      margin-top: 12px;
+    }
+
+    &-header {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &-history {
+    &-pagination {
+      display: flex;
+
+      &-total {
+        margin-left: 12px;
+      }
+
+      &-prev {
+        margin-left: auto;
+      }
+
+      &-next {
+        margin-left: 12px;
+      }
+
+      &-prev, &-next {
+        cursor: pointer;
+      }
+    }
+  }
+}

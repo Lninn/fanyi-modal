@@ -12,6 +12,7 @@ interface ModalProps {
   children: React.ReactNode
   
   mask?: boolean
+  width?: number
 }
 
 const Modal = ({
@@ -21,6 +22,7 @@ const Modal = ({
   children,
 
   mask,
+  width,
 }: ModalProps) => {
   useEffect(() => {
     function handleKeyDown(evt: KeyboardEvent) {
@@ -46,7 +48,7 @@ const Modal = ({
   const modalDom = (
     <div>
       <div className={rootCls}>
-        <div className={`${clsPrefix}-modal-wrap`}>
+        <div className={`${clsPrefix}-modal-wrap`} style={{ width }}>
           <div className={`${clsPrefix}-modal-content`}>
             {children}
           </div>
