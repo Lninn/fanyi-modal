@@ -5,9 +5,12 @@ import React, { CSSProperties } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createStore, useStore } from '@/store'
 import { IMessage } from '@/action'
+import { log } from '@/utils'
 
 
-console.log('content.js ...')
+/// config
+const APP_ID = 'CE-FANYI-ID'
+export const CLS_REEFIX = 'TRANSLATE-APP'
 
 export type TranslateAppState = {
   visible: boolean
@@ -40,7 +43,7 @@ const App = () => {
     const handleUserClick = (evt: { target: any }) => {
       const target = evt.target
     
-      const clsSelector = `#${rootId}`
+      const clsSelector = `#${APP_ID}`
       if (!target.closest(clsSelector)) {
         store.setState({ visible: false })
       }
@@ -66,14 +69,12 @@ const App = () => {
   );
 }
 
-const rootId = 'id-fanyi'
-
-const rejectModal = () => {
-  let rootDom = document.getElementById(rootId)
+const reject = () => {
+  let rootDom = document.getElementById(APP_ID)
   
   if (!rootDom) {
     rootDom = document.createElement('div')
-    rootDom.id = rootId
+    rootDom.id = APP_ID
 
     document.body.append(rootDom)
   }
@@ -112,8 +113,6 @@ const __main = () => {
       store.setState(appState)
     }
 
-    console.log('onRuntimeMessage ', appState)
-
     sendResponse(true)
   }
 
@@ -134,15 +133,15 @@ const __main = () => {
 
   console.log('loading content.js...')
 
-  rejectModal()
+  reject()
 
   chrome.runtime.sendMessage(
-    { type: '123' },
+    { type: 'load-content' } as IMessage,
     function() {
       const err = chrome.runtime.lastError
 
       if (err) {
-        console.log('[content] error', JSON.stringify(err))
+        log.err(err.message)
       }
     }
   )

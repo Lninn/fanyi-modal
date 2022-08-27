@@ -46,13 +46,13 @@ function handleContextMenuClick(evt: chrome.contextMenus.OnClickData) {
 }
 
 function handleRuntimeMessage(
-  message: any,
+  message: IMessage,
   _: any,
   sendResponse: (response?: any) => void,
 ) {
   switch (message.type) {
-    case '123':
-      console.log('content.js is load')
+    case 'load-content':
+      log.info('content.js is load')
       break
   }
 

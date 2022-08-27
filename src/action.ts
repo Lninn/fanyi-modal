@@ -9,6 +9,8 @@ export type IMessage = {
   payload: TransItem
 } | {
   type: 'error'
+} | {
+  type: 'load-content'
 }
 
 

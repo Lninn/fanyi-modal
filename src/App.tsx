@@ -1,5 +1,7 @@
 function App() {
-  return null
+  return (
+    <div>Hello, World</div>
+  )
 }
 
 export default App

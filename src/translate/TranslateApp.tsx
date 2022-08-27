@@ -11,6 +11,7 @@ import ArrowIcon from '../assets/arrow'
 import VolumeIcon from '../assets/volume'
 import ThemeIcon from '../assets/theme'
 import { TranslateContext } from './TranslateContext';
+import { CLS_REEFIX } from './index';
 
 
 const SOURCE_ACTIONS: IActions = [
@@ -45,7 +46,7 @@ interface TranslateAppProps {
   style: CSSProperties
 }
 
-const CLS_REEFIX = 'test-app'
+
 
 const TranslateApp = ({
   source,
