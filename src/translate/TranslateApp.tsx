@@ -46,8 +46,6 @@ interface TranslateAppProps {
   style: CSSProperties
 }
 
-
-
 const TranslateApp = ({
   source,
   target,
