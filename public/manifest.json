@@ -27,7 +27,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["content.js", "assets/*"],
+      "resources": ["translate.js", "assets/*"],
       "matches": ["<all_urls>"]
     }
   ]

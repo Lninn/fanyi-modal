@@ -11,9 +11,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
-        popup: path.resolve(__dirname, 'popup.html'),
         background: path.resolve(__dirname, 'src/background.ts'),
-        content: path.resolve(__dirname, 'src/translate/index.tsx'),
+        translate: path.resolve(__dirname, 'src/translate/index.tsx'),
+        popup: path.resolve(__dirname, 'popup.html'),
       },
       output: {
         sourcemap: 'inline',
