@@ -1,6 +1,6 @@
-import { TranslateAppState } from "@/content"
 import {  IDocument } from "@/type"
 import { CSSProperties } from "react"
+import { TranslateAppState } from "."
 import TranslateApp from "./TranslateApp"
 import { TranslateProvider } from "./TranslateContext"
 

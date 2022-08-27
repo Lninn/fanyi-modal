@@ -13,7 +13,7 @@ export default defineConfig({
         main: path.resolve(__dirname, 'index.html'),
         popup: path.resolve(__dirname, 'popup.html'),
         background: path.resolve(__dirname, 'src/background.ts'),
-        content: path.resolve(__dirname, 'src/content.tsx'),
+        content: path.resolve(__dirname, 'src/translate/index.tsx'),
       },
       output: {
         sourcemap: 'inline',

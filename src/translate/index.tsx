@@ -1,11 +1,10 @@
+import './Translate.less'
+
+import Translate from './Translate'
 import React, { CSSProperties } from 'react'
-import classnames from 'classnames'
 import ReactDOM from 'react-dom/client'
-import {
-  IMessage
-} from './action'
-import { createStore, useStore } from './store'
-import Translate from './translate'
+import { createStore, useStore } from '@/store'
+import { IMessage } from '@/action'
 
 
 console.log('content.js ...')
