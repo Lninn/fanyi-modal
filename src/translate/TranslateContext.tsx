@@ -1,13 +1,34 @@
 import { ActionType } from "@/type"
 import React from "react"
 
+function copy(text: string) {
+  var input = document.createElement('textarea');
+  input.innerHTML = text;
+  document.body.appendChild(input);
+  input.select();
+  var result = document.execCommand('copy');
+  document.body.removeChild(input);
+  return result;
+}
 
 const copyTextToClip = (text?: string) => {
-  console.log('copy text ', text)
+  if (!text) return
+  
+  copy(text)
 }
 
 const playSound = (text?: string) => {
-  console.log('play sound ', text)
+  if (!text) return
+
+  const msg = new SpeechSynthesisUtterance();
+  const voices = window.speechSynthesis.getVoices();
+  msg.voice = voices[10]; 
+  msg.volume = 1; // From 0 to 1
+  msg.rate = 1; // From 0.1 to 10
+  msg.pitch = 2; // From 0 to 2
+  msg.text = text;
+  msg.lang = 'en';
+  speechSynthesis.speak(msg);
 }
 
 const collectWord = (text?: string) => {
