@@ -5,7 +5,7 @@ import {
   IActions,
   IDocument
 } from '@/type'
-import React from 'react'
+import React, { CSSProperties } from 'react'
 
 import CopyIcon from '../assets/copy';
 import CollectIcon from '../assets/collect'
@@ -45,16 +45,18 @@ const TARGET_ACTIONS: IActions = [
 interface TranslateAppProps {
   source: IDocument
   target: IDocument
+  style: CSSProperties
 }
 
 const CLS_REEFIX = 'test-app'
 
 const TranslateApp = ({
   source,
-  target
+  target,
+  style
 }: TranslateAppProps) => {
   return (
-    <div className={`${CLS_REEFIX}-modal`}>
+    <div className={`${CLS_REEFIX}-modal`} style={style}>
       <div className={`${CLS_REEFIX}-modal-header`}>
         <div className={`${CLS_REEFIX}-modal-header-language`}>
           <span className={`${CLS_REEFIX}-modal-header-language-text`}>

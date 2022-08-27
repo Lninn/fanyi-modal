@@ -1,6 +1,7 @@
+import { TranslateAppState } from "@/content"
 import { createDoc } from "@/Document"
 import { ActionType, IDocument } from "@/type"
-import React from "react"
+import React, { CSSProperties } from "react"
 import TranslateApp from "./TranslateApp"
 
 
@@ -54,19 +55,29 @@ const TranslateProvider = ({
   )
 }
 
-const TranslateModal = () => {
-  const [source] = React.useState<IDocument>(
-    createDoc('cn')
-  )
-  const [target] = React.useState<IDocument>(
-    createDoc('en')
-  )
+const TranslateModal = ({
+  appState,
+  style
+}: {
+  appState: TranslateAppState
+  style: CSSProperties,
+}) => {
+  const source: IDocument = {
+    lang: 'cn',
+    text: appState.src
+  }
+  
+  const target: IDocument = {
+    lang: 'en',
+    text: appState.dst
+  }
 
   return (
     <TranslateProvider>
       <TranslateApp
         source={source}
         target={target}
+        style={style}
       />
     </TranslateProvider>
   )

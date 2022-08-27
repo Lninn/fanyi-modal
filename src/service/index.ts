@@ -1,4 +1,5 @@
 import { TransItem } from "@/type";
+import { log } from "@/utils";
 import * as Realm from "realm-web";
 
 
@@ -31,16 +32,17 @@ const getUser = async () => {
 
 export const saveWord = async (transItem: TransItem) => {
   try {
-    const doc = {
-      ...transItem,
+    const doc: IWord = {
+      from: transItem.src,
+      to: transItem.dst,
       created_at: new Date().getTime(),
     }
 
     const user = await getUser()
 
     await user.functions.saveWord(doc);
-  } catch (err) {
-    console.error(err)
+  } catch (err: any) {
+    log.err('[saveWord] ' + err.message)
   }
 }
 

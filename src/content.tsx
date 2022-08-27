@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import classnames from 'classnames'
 import ReactDOM from 'react-dom/client'
 import {
@@ -10,8 +10,19 @@ import TranslateModal from './components/TranslateModal'
 
 console.log('content.js ...')
 
-const initialState = {
-  visible: true,
+export type TranslateAppState = {
+  visible: boolean
+  loading: boolean
+
+  left: number
+  top: number
+
+  src: string
+  dst: string
+}
+
+const initialState: TranslateAppState = {
+  visible: false,
   loading: false,
 
   left: 0,
@@ -25,13 +36,6 @@ export const store = createStore(initialState);
 
 const App = () => {
   const appState = useStore(store)
-  console.log('appState ', appState)
-
-  const clsPrefix = 'fanyiModal'
-  const cls = classnames(
-    clsPrefix,
-    [appState.visible ? 'show': 'hide']
-  )
 
   React.useEffect(() => {
     const handleUserClick = (evt: { target: any }) => {
@@ -50,13 +54,18 @@ const App = () => {
     }
   }, [])
 
-  const style = {
+  const style: CSSProperties = {
+    position: 'absolute',
     left: appState.left,
     top: appState.top,
+    display: appState.visible ? 'block' : 'none',
+    zIndex: 9999,
   }
 
   return (
-    <TranslateModal />
+    <div>
+      <TranslateModal style={style} appState={appState} />
+    </div>
   );
 }
 

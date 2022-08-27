@@ -20,6 +20,9 @@ export default defineConfig({
         entryFileNames() {
           return '[name].js'
         },
+        assetFileNames() {
+          return '[name].[ext]'
+        }
       }
     }
   },
