@@ -123,14 +123,14 @@ const __main = () => {
   const handleMouseUp = (evt: MouseEvent) => {
     const selection = document.getSelection()
 
-    if (!selection) return null;
-  
+    if (!selection || store.getState().visible) return
+
     if (selection.type === 'Range') {
-      const { x, y } = evt
+      const { pageX, pageY } = evt
 
       store.setState({
-        left: x,
-        top: y,
+        left: pageX,
+        top: pageY,
       })
     }
   }
