@@ -1,0 +1,90 @@
+@prefix: TRANSLATE-APP;
+
+.@{prefix} {
+
+  &-history {
+    padding: 12px;
+  }
+
+  &-itemList {
+    margin-top: 12px;
+  }
+
+  &-saveItem {
+    font-size: 14px;
+    line-height: 1.675;
+
+    display: flex;
+    flex-direction: column;
+
+    
+    & + & {
+      border-top: 1px solid #e5e5e5;
+      margin-top: 12px;
+    }
+
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      font-size: 14px;
+      line-height: 1;
+
+      &-btn {
+        font-size: 1.3rem;
+        line-height: 0;
+        color: orange;
+
+        cursor: pointer;
+      }
+    }
+
+    &-content {
+      margin-top: 6px;
+    }
+  }
+
+  &-pagination {
+    display: flex;
+    align-items: center;
+
+    font-size: 14px;
+
+    &-no {
+      * + * {
+        margin-left: 4px;
+      }
+    }
+
+    &-total {
+      margin-left: 12px;
+    }
+
+    &-prev, &-next {
+      display: inline-flex;
+      align-items: center;
+
+      cursor: pointer;
+
+      font-size: 1.2rem;
+
+      &.disabled {
+        color: #e5e5e5;
+        cursor: not-allowed;
+      }
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    &-prev {
+      margin-left: auto;
+    }
+
+    &-next {
+      margin-left: 12px;
+    }
+  }
+}

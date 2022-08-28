@@ -1,0 +1,90 @@
+@root_id: CE-FANYI-ID;
+@prefix: TRANSLATE-APP;
+
+#@{root_id} {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+
+.@{prefix}-modal {
+  font-size: 14px;
+
+  background-color: #fff;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  
+  max-width: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  &-header {
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+
+    display: flex;
+
+    &-language {
+      display: inline-flex;
+      align-items: center;
+
+      margin-right: 24px;
+
+      &-icon {
+        margin-left: 12px;
+        margin-right: 12px;
+      }
+    }
+
+    &-operate {
+      margin-left: auto;
+
+      &-action {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+
+    padding: 12px;
+  }
+}
+
+.@{prefix}-document {
+  
+  &-line {
+    height: 1px;
+    background-color: #e5e5e5;
+
+    margin-top: 16px;
+    margin-bottom: 9px;
+  }
+
+  &-text {
+    min-height: 45px;
+  }
+
+  &-operate {
+    margin-top: 8px;
+
+    display: flex;
+
+    &-action {
+      line-height: 0;
+
+      cursor: pointer;
+
+      & + & {
+        margin-left: 8px;
+      }
+    }
+  }
+}
+

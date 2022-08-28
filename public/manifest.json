@@ -1,16 +1,17 @@
 {
-  "name": "my-extension",
+  "name": "fanyi",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "permissions": [
     "contextMenus",
     "notifications"
   ],
   "host_permissions": [
-    "http://api.fanyi.baidu.com/"
+    "https://fanyi-api.baidu.com/*"
   ],
   "action": {
     "default_title": "My Bookmarks",
@@ -20,7 +21,14 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["loader.js"],
+      "css": ["index.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["translate.js", "assets/*"],
+      "matches": ["<all_urls>"]
     }
   ]
 }
