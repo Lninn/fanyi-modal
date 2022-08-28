@@ -4,7 +4,6 @@ import { log } from "./utils"
 import { TransItem } from "./type"
 import { IMessage } from "./action"
 
-
 console.log("background.js ...")
 
 const COMMEND_ID = "COMMEND_ID"
@@ -16,19 +15,17 @@ function main() {
     createContextMenus()
   })
 
-  chrome.contextMenus.onClicked.addListener(
-    handleContextMenuClick
-  )
+  chrome.contextMenus.onClicked.addListener(handleContextMenuClick)
 
   chrome.runtime.onMessage.addListener(handleRuntimeMessage)
 }
 
 function createContextMenus() {
   const selectProperties: chrome.contextMenus.CreateProperties = {
-    title: COMMEND_ID + " \"%s\"",
+    title: COMMEND_ID + ' "%s"',
     id: COMMEND_ID,
     contexts: ["selection"],
-  };
+  }
 
   chrome.contextMenus.create(selectProperties, () => {
     console.log("context menus 创建成功")
@@ -45,11 +42,7 @@ function handleContextMenuClick(evt: chrome.contextMenus.OnClickData) {
   }
 }
 
-function handleRuntimeMessage(
-  message: IMessage,
-  _: any,
-  sendResponse: (response?: any) => void,
-) {
+function handleRuntimeMessage(message: IMessage, _: any, sendResponse: (response?: any) => void) {
   switch (message.type) {
     case "load-content":
       log.info("content.js is load")
@@ -65,7 +58,7 @@ async function handleTranslateClick(queryText: string) {
   }
 
   await sendToActiveTab({
-    type: "start"
+    type: "start",
   })
 
   const url = createTranslateUrl(queryText)
@@ -84,11 +77,7 @@ async function handleTranslateClick(queryText: string) {
 
 async function baiduQuery(url: string) {
   try {
-    const {
-      error_code,
-      error_msg,
-      trans_result
-    } = await fetch(url).then(r => r.json())
+    const { error_code, error_msg, trans_result } = await fetch(url).then((r) => r.json())
 
     if (error_code === "54001" || error_code === "52003") {
       log.err(error_msg)

@@ -19,4 +19,3 @@ export type TransItem = {
   src: string
   dst: string
 }
-

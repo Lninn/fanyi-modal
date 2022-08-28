@@ -1,7 +1,6 @@
-import { faker } from "@faker-js/faker";
-import Mock from "mockjs";
-import { IDocument, Lang, TransItem } from "./type";
-
+import { faker } from "@faker-js/faker"
+import Mock from "mockjs"
+import { IDocument, Lang, TransItem } from "./type"
 
 const mockWord = (lang: Lang) => {
   if (lang === "cn") {
@@ -14,7 +13,6 @@ const mockWord = (lang: Lang) => {
 
   return ""
 }
-
 
 const mockParagraph = (lang: Lang): string => {
   if (lang === "cn") {
@@ -31,7 +29,7 @@ const mockParagraph = (lang: Lang): string => {
 export const createDoc = (lang: Lang) => {
   const doc: IDocument = {
     lang,
-    text: mockParagraph(lang)
+    text: mockParagraph(lang),
   }
 
   return doc
@@ -40,7 +38,7 @@ export const createDoc = (lang: Lang) => {
 export const createTransItem = () => {
   const item: TransItem = {
     src: mockWord("cn"),
-    dst: mockWord("en")
+    dst: mockWord("en"),
   }
 
   return item
@@ -51,7 +49,7 @@ export const creatTransItemList = () => {
 
   let COUNT = 30
 
-  while(COUNT > 0) {
+  while (COUNT > 0) {
     const item = createTransItem()
     list.push(item)
 

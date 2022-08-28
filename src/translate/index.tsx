@@ -7,7 +7,6 @@ import { createStore, useStore } from "@/store"
 import { IMessage } from "@/action"
 import { log } from "@/utils"
 
-
 // / config
 const APP_ID = "CE-FANYI-ID"
 export const CLS_REEFIX = "TRANSLATE-APP"
@@ -34,7 +33,7 @@ const initialState: TranslateAppState = {
   dst: "-",
 }
 
-export const store = createStore(initialState);
+export const store = createStore(initialState)
 
 const App = () => {
   const appState = useStore(store)
@@ -42,7 +41,7 @@ const App = () => {
   React.useEffect(() => {
     const handleUserClick = (evt: { target: any }) => {
       const target = evt.target
-    
+
       const clsSelector = `#${APP_ID}`
       if (!target.closest(clsSelector)) {
         store.setState({ visible: false })
@@ -64,14 +63,12 @@ const App = () => {
     zIndex: 9999,
   }
 
-  return (
-    <Translate style={style} appState={appState} />
-  );
+  return <Translate style={style} appState={appState} />
 }
 
 const reject = () => {
   let rootDom = document.getElementById(APP_ID)
-  
+
   if (!rootDom) {
     rootDom = document.createElement("div")
     rootDom.id = APP_ID
@@ -84,12 +81,7 @@ const reject = () => {
 }
 
 const __main = () => {
-
-  const onRuntimeMessage = (
-    message: IMessage, 
-    _: any,
-    sendResponse: (response: any) => void
-  ) => {
+  const onRuntimeMessage = (message: IMessage, _: any, sendResponse: (response: any) => void) => {
     let appState
 
     if (message.type === "start") {
@@ -135,16 +127,13 @@ const __main = () => {
 
   reject()
 
-  chrome.runtime.sendMessage(
-    { type: "load-content" } as IMessage,
-    function() {
-      const err = chrome.runtime.lastError
+  chrome.runtime.sendMessage({ type: "load-content" } as IMessage, function () {
+    const err = chrome.runtime.lastError
 
-      if (err) {
-        log.err(err.message)
-      }
+    if (err) {
+      log.err(err.message)
     }
-  )
+  })
 
   chrome.runtime.onMessage.addListener(onRuntimeMessage)
 

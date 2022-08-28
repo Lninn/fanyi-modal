@@ -1,20 +1,19 @@
-import { TransItem } from "@/type";
-import { log } from "@/utils";
-import * as Realm from "realm-web";
-
+import { TransItem } from "@/type"
+import { log } from "@/utils"
+import * as Realm from "realm-web"
 
 // https://cloud.mongodb.com/v2#/org/62eea0aa00fc641fee06bf87/projects
 
 interface IWord {
-  from: string;
-  to: string;
-  created_at: number;
+  from: string
+  to: string
+  created_at: number
 }
 
 const login = async () => {
   const APP_ID = "words-app-cupww"
   const app = new Realm.App({ id: APP_ID })
-  
+
   const credentials = Realm.Credentials.anonymous()
   const user = await app.logIn(credentials)
 
@@ -40,7 +39,7 @@ export const saveWord = async (transItem: TransItem) => {
 
     const user = await getUser()
 
-    await user.functions.saveWord(doc);
+    await user.functions.saveWord(doc)
   } catch (err: any) {
     log.err("[saveWord] " + err.message)
   }
@@ -50,8 +49,8 @@ export const queryWords = async () => {
   try {
     const user = await getUser()
 
-    const result = await user.functions.queryWords();
-    
+    const result = await user.functions.queryWords()
+
     return result
   } catch (err) {
     console.error(err)
