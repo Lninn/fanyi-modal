@@ -13,7 +13,6 @@ export default defineConfig({
         main: path.resolve(__dirname, "index.html"),
         background: path.resolve(__dirname, "src/background.ts"),
         translate: path.resolve(__dirname, "src/translate/index.tsx"),
-        popup: path.resolve(__dirname, "popup.html"),
       },
       output: {
         sourcemap: "inline",
@@ -21,7 +20,7 @@ export default defineConfig({
           return "[name].js"
         },
         assetFileNames() {
-          return "[name].[ext]"
+          return "assets/[name].[ext]"
         }
       }
     }
