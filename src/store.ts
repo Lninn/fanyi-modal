@@ -1,5 +1,7 @@
 import React from "react"
 
+type Listener = () => void
+
 export const createStore = (initialState: {
   visible: boolean
   loading: boolean
@@ -10,7 +12,7 @@ export const createStore = (initialState: {
 }) => {
   let state = initialState
   const getState = () => state
-  const listeners = new Set<Function>()
+  const listeners = new Set<Listener>()
   const setState = (fn: any) => {
     if (typeof fn === "function") {
       state = fn(state)
@@ -21,7 +23,7 @@ export const createStore = (initialState: {
     listeners.forEach((l) => l())
   }
 
-  const subscribe = (listener: Function) => {
+  const subscribe = (listener: Listener) => {
     listeners.add(listener)
     return () => listeners.delete(listener)
   }
