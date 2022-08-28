@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { creatTransItemList } from "./Document";
 import { TransItem } from "./type";
 
-import './History.less'
+import "./History.less"
 
 
 type Fn = (...args: any[]) => any
@@ -65,6 +65,9 @@ const usePagination = ({
 const Item = ({
   item,
   onClick,
+
+
+  
   clsPrefix,
 }: {
   item: TransItem
@@ -126,7 +129,7 @@ const History = ({
   const pagination = usePagination({ list })
 
   const handleItemClick = () => {
-    console.log('handleItemClick')
+    console.log("handleItemClick")
   }
 
   return (

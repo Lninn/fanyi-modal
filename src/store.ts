@@ -6,7 +6,7 @@ export const createStore = (initialState: { visible: boolean; loading: boolean; 
   const listeners = new Set<Function>();
   const setState = (fn: any) => {
 
-    if (typeof fn === 'function') {
+    if (typeof fn === "function") {
       state = fn(state);
     } else {
       state = { ...state, ...fn };

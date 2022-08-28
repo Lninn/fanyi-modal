@@ -1,6 +1,6 @@
-import History from './History'
+import History from "./History"
 
-const CLS_REEFIX = 'TRANSLATE-APP'
+const CLS_REEFIX = "TRANSLATE-APP"
 
 function App() {
   return (

@@ -2,40 +2,40 @@ import {
   IAction,
   IActions,
   IDocument
-} from '@/type'
-import React, { CSSProperties } from 'react'
+} from "@/type"
+import React, { CSSProperties } from "react"
 
-import CopyIcon from '../assets/copy';
-import CollectIcon from '../assets/collect'
-import ArrowIcon from '../assets/arrow'
-import VolumeIcon from '../assets/volume'
-import ThemeIcon from '../assets/theme'
-import { TranslateContext } from './TranslateContext';
-import { CLS_REEFIX } from './index';
+import CopyIcon from "../assets/copy";
+import CollectIcon from "../assets/collect"
+import ArrowIcon from "../assets/arrow"
+import VolumeIcon from "../assets/volume"
+import ThemeIcon from "../assets/theme"
+import { TranslateContext } from "./TranslateContext";
+import { CLS_REEFIX } from "./index";
 
 
 const SOURCE_ACTIONS: IActions = [
   {
-    type: 'collect',
-    desc: '收藏',
+    type: "collect",
+    desc: "收藏",
     icon: <CollectIcon />
   },
   {
-    type: 'sound',
-    desc: '声音',
+    type: "sound",
+    desc: "声音",
     icon: <VolumeIcon />,
   },
 ];
 
 const TARGET_ACTIONS: IActions = [
   {
-    type: 'copy',
-    desc: '复制',
+    type: "copy",
+    desc: "复制",
     icon: <CopyIcon />,
   },
   {
-    type: 'sound',
-    desc: '声音',
+    type: "sound",
+    desc: "声音",
     icon: <VolumeIcon />,
   }
 ]

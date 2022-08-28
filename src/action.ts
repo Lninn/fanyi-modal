@@ -3,14 +3,14 @@ import { TransItem } from "./type"
 
 
 export type IMessage = {
-  type: 'start'
+  type: "start"
 } | {
-  type: 'end',
+  type: "end",
   payload: TransItem
 } | {
-  type: 'error'
+  type: "error"
 } | {
-  type: 'load-content'
+  type: "load-content"
 }
 
 

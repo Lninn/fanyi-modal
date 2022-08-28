@@ -13,12 +13,12 @@ const Translate = ({
   style: CSSProperties,
 }) => {
   const source: IDocument = {
-    lang: 'cn',
+    lang: "cn",
     text: appState.src
   }
   
   const target: IDocument = {
-    lang: 'en',
+    lang: "en",
     text: appState.dst
   }
 

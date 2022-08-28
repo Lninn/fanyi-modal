@@ -2,11 +2,11 @@ import { ActionType } from "@/type"
 import React from "react"
 
 function copy(text: string) {
-  var input = document.createElement('textarea');
+  const input = document.createElement("textarea");
   input.innerHTML = text;
   document.body.appendChild(input);
   input.select();
-  var result = document.execCommand('copy');
+  const result = document.execCommand("copy");
   document.body.removeChild(input);
   return result;
 }
@@ -27,23 +27,23 @@ const playSound = (text?: string) => {
   msg.rate = 1; // From 0.1 to 10
   msg.pitch = 2; // From 0 to 2
   msg.text = text;
-  msg.lang = 'en';
+  msg.lang = "en";
   speechSynthesis.speak(msg);
 }
 
 const collectWord = (text?: string) => {
-  console.log('collect word ', text)
+  console.log("collect word ", text)
 }
 
 const handleCommand = (type: ActionType, text?: string) => {
   switch (type) {
-    case 'collect':
+    case "collect":
       collectWord(text)
       break
-    case 'copy':
+    case "copy":
       copyTextToClip(text)
       break
-    case 'sound':
+    case "sound":
       playSound(text)
       break
   }

@@ -1,16 +1,16 @@
-import './Translate.less'
+import "./Translate.less"
 
-import Translate from './Translate'
-import React, { CSSProperties } from 'react'
-import ReactDOM from 'react-dom/client'
-import { createStore, useStore } from '@/store'
-import { IMessage } from '@/action'
-import { log } from '@/utils'
+import Translate from "./Translate"
+import React, { CSSProperties } from "react"
+import ReactDOM from "react-dom/client"
+import { createStore, useStore } from "@/store"
+import { IMessage } from "@/action"
+import { log } from "@/utils"
 
 
-/// config
-const APP_ID = 'CE-FANYI-ID'
-export const CLS_REEFIX = 'TRANSLATE-APP'
+// / config
+const APP_ID = "CE-FANYI-ID"
+export const CLS_REEFIX = "TRANSLATE-APP"
 
 export type TranslateAppState = {
   visible: boolean
@@ -30,8 +30,8 @@ const initialState: TranslateAppState = {
   left: 0,
   top: 0,
 
-  src: '-',
-  dst: '-',
+  src: "-",
+  dst: "-",
 }
 
 export const store = createStore(initialState);
@@ -49,18 +49,18 @@ const App = () => {
       }
     }
 
-    window.addEventListener('click', handleUserClick)
+    window.addEventListener("click", handleUserClick)
 
     return () => {
-      window.removeEventListener('click', handleUserClick)
+      window.removeEventListener("click", handleUserClick)
     }
   }, [])
 
   const style: CSSProperties = {
-    position: 'absolute',
+    position: "absolute",
     left: appState.left,
     top: appState.top,
-    display: appState.visible ? 'block' : 'none',
+    display: appState.visible ? "block" : "none",
     zIndex: 9999,
   }
 
@@ -73,7 +73,7 @@ const reject = () => {
   let rootDom = document.getElementById(APP_ID)
   
   if (!rootDom) {
-    rootDom = document.createElement('div')
+    rootDom = document.createElement("div")
     rootDom.id = APP_ID
 
     document.body.append(rootDom)
@@ -92,17 +92,17 @@ const __main = () => {
   ) => {
     let appState
 
-    if (message.type === 'start') {
+    if (message.type === "start") {
       appState = {
         visible: true,
         loading: true,
       }
-    } else if (message.type === 'end') {
+    } else if (message.type === "end") {
       appState = {
         loading: false,
         ...message.payload,
       }
-    } else if (message.type === 'error') {
+    } else if (message.type === "error") {
       appState = {
         visible: false,
         loading: false,
@@ -121,7 +121,7 @@ const __main = () => {
 
     if (!selection || store.getState().visible) return
 
-    if (selection.type === 'Range') {
+    if (selection.type === "Range") {
       const { pageX, pageY } = evt
 
       store.setState({
@@ -131,12 +131,12 @@ const __main = () => {
     }
   }
 
-  console.log('loading content.js...')
+  console.log("loading content.js...")
 
   reject()
 
   chrome.runtime.sendMessage(
-    { type: 'load-content' } as IMessage,
+    { type: "load-content" } as IMessage,
     function() {
       const err = chrome.runtime.lastError
 
@@ -148,7 +148,7 @@ const __main = () => {
 
   chrome.runtime.onMessage.addListener(onRuntimeMessage)
 
-  document.addEventListener('mouseup', handleMouseUp)
+  document.addEventListener("mouseup", handleMouseUp)
 }
 
 __main()

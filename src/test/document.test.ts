@@ -1,9 +1,9 @@
-import { test, expect } from 'vitest'
+import { test, expect } from "vitest"
 
-import { createDoc, creatTransItemList } from '../Document'
+import { createDoc, creatTransItemList } from "../Document"
 
-test('create Chinese document', () => {
-  const doc = createDoc('cn')
+test("create Chinese document", () => {
+  const doc = createDoc("cn")
 
   expect(doc).toMatchInlineSnapshot(`
     {
@@ -13,8 +13,8 @@ test('create Chinese document', () => {
   `)
 })
 
-test('create English document', () => {
-  const doc = createDoc('en')
+test("create English document", () => {
+  const doc = createDoc("en")
 
   expect(doc).toMatchInlineSnapshot(`
     {
@@ -24,7 +24,7 @@ test('create English document', () => {
   `)
 })
 
-test('create transItem list', () => {
+test("create transItem list", () => {
   const list = creatTransItemList()
 
   expect(list).toMatchInlineSnapshot(`

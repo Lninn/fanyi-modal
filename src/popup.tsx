@@ -1,13 +1,13 @@
-import './popup.less'
+import "./popup.less"
 
-import React, { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom/client'
-import { queryWords } from '@/service'
+import React, { useState, useEffect } from "react"
+import ReactDOM from "react-dom/client"
+import { queryWords } from "@/service"
 
-import { query } from '@/service/mock'
+import { query } from "@/service/mock"
 
 
-console.log('popup.js loading...')
+console.log("popup.js loading...")
 
 export const useSource = () => {
   const [data, setData] = useState<any[]>([]);
@@ -17,7 +17,7 @@ export const useSource = () => {
     setLoading(true)
     query().then(
       result => {
-        console.log('result ', result)
+        console.log("result ", result)
       }
     ).finally(() => setLoading(false))
   }, [])
@@ -29,7 +29,7 @@ const App = () => {
   const [dataSource, loading] = useSource()
 
   useEffect(() => {
-    console.log('[App] mounted')
+    console.log("[App] mounted")
   }, [])
 
   return (
@@ -85,7 +85,7 @@ const List = (props: IList) => {
   )
 }
 
-const root = document.getElementById('root') as HTMLElement
+const root = document.getElementById("root") as HTMLElement
 ReactDOM.createRoot(root).render(
   <App />
 )

@@ -12,7 +12,7 @@ interface IWord {
 }
 
 const login = async () => {
-  const APP_ID = 'words-app-cupww'
+  const APP_ID = "words-app-cupww"
   const app = new Realm.App({ id: APP_ID })
   
   const credentials = Realm.Credentials.anonymous()
@@ -42,7 +42,7 @@ export const saveWord = async (transItem: TransItem) => {
 
     await user.functions.saveWord(doc);
   } catch (err: any) {
-    log.err('[saveWord] ' + err.message)
+    log.err("[saveWord] " + err.message)
   }
 }
 

@@ -1,13 +1,13 @@
-import { createTranslateUrl } from './baidu'
-import { saveWord } from '@/service'
-import { log } from './utils'
-import { TransItem } from './type'
-import { IMessage } from './action'
+import { createTranslateUrl } from "./baidu"
+import { saveWord } from "@/service"
+import { log } from "./utils"
+import { TransItem } from "./type"
+import { IMessage } from "./action"
 
 
-console.log('background.js ...')
+console.log("background.js ...")
 
-const COMMEND_ID = 'COMMEND_ID'
+const COMMEND_ID = "COMMEND_ID"
 
 main()
 
@@ -25,13 +25,13 @@ function main() {
 
 function createContextMenus() {
   const selectProperties: chrome.contextMenus.CreateProperties = {
-    title: COMMEND_ID + ' "%s"',
+    title: COMMEND_ID + " \"%s\"",
     id: COMMEND_ID,
-    contexts: ['selection'],
+    contexts: ["selection"],
   };
 
   chrome.contextMenus.create(selectProperties, () => {
-    console.log('context menus 创建成功')
+    console.log("context menus 创建成功")
   })
 }
 
@@ -51,8 +51,8 @@ function handleRuntimeMessage(
   sendResponse: (response?: any) => void,
 ) {
   switch (message.type) {
-    case 'load-content':
-      log.info('content.js is load')
+    case "load-content":
+      log.info("content.js is load")
       break
   }
 
@@ -65,7 +65,7 @@ async function handleTranslateClick(queryText: string) {
   }
 
   await sendToActiveTab({
-    type: 'start'
+    type: "start"
   })
 
   const url = createTranslateUrl(queryText)
@@ -76,7 +76,7 @@ async function handleTranslateClick(queryText: string) {
   }
 
   await sendToActiveTab({
-    type: 'end',
+    type: "end",
     payload: transItem,
   })
   await saveWord(transItem)
@@ -90,7 +90,7 @@ async function baiduQuery(url: string) {
       trans_result
     } = await fetch(url).then(r => r.json())
 
-    if (error_code === '54001' || error_code === '52003') {
+    if (error_code === "54001" || error_code === "52003") {
       log.err(error_msg)
       return null
     }
@@ -144,8 +144,8 @@ async function sendToActiveTab(message: IMessage) {
   try {
     const result = await chrome.tabs.sendMessage(activeId, message)
 
-    log.info('[sendToActiveTab] ' + result)
+    log.info("[sendToActiveTab] " + result)
   } catch (error: any) {
-    log.err('[sendToActiveTab] ' + error.message)
+    log.err("[sendToActiveTab] " + error.message)
   }
 }

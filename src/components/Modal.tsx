@@ -1,8 +1,8 @@
-import classNames from 'classnames'
-import React, { useEffect } from 'react'
-import { createPortal } from 'react-dom'
+import classNames from "classnames"
+import React, { useEffect } from "react"
+import { createPortal } from "react-dom"
 
-import './Modal.less'
+import "./Modal.less"
 
 
 interface ModalProps {
@@ -28,15 +28,15 @@ const Modal = ({
     function handleKeyDown(evt: KeyboardEvent) {
       const { code } = evt
 
-      if (code === 'Escape') {
+      if (code === "Escape") {
         onCancel()
       }
     } 
 
-    window.addEventListener('keyup', handleKeyDown)
+    window.addEventListener("keyup", handleKeyDown)
 
     return () => {
-      window.removeEventListener('keyup', handleKeyDown)
+      window.removeEventListener("keyup", handleKeyDown)
     }
   }, [])
 

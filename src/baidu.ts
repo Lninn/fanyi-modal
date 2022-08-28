@@ -1,7 +1,7 @@
-import { md5 } from './utils'
+import { md5 } from "./utils"
 
 
-const BAIDU_URL = 'https://fanyi-api.baidu.com/api/trans/vip/translate'
+const BAIDU_URL = "https://fanyi-api.baidu.com/api/trans/vip/translate"
 const APP_ID = import.meta.env.VITE_BAIDU_APP_ID
 const KEY = import.meta.env.VITE_BAIDU_APP_KEY
 
@@ -13,8 +13,8 @@ export const createTranslateUrl = (q: any) => {
 
   const params = {
     q,
-    from: 'en',
-    to: 'zh',
+    from: "en",
+    to: "zh",
     appid: APP_ID,
     salt,
     sign,
@@ -32,14 +32,14 @@ const toSign = (q: any, salt: number) => {
 }
 
 const append = (url: string, params: any) => {
-  const qIdx = url.indexOf('?')
+  const qIdx = url.indexOf("?")
   if (qIdx === -1) {
     url = `${url}?`
   }
 
   return Object.keys(params).reduce((accu, next, idx) => {
     const value = params[next]
-    const preFix = idx === 0 ? '' : '&'
+    const preFix = idx === 0 ? "" : "&"
 
     accu += `${preFix}${next}=${value}`
 
