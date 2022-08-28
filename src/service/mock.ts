@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker"
 
-const resolve = (r: any) => Promise.resolve(r)
+function resolve<T>(response: T) {
+  return Promise.resolve(response)
+}
 
 export const query = () => {
   const randomName = faker.name.fullName()

@@ -40,8 +40,10 @@ export const saveWord = async (transItem: TransItem) => {
     const user = await getUser()
 
     await user.functions.saveWord(doc)
-  } catch (err: any) {
-    log.err("[saveWord] " + err.message)
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      log.err("[saveWord] " + err.message)
+    }
   }
 }
 

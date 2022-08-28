@@ -15,7 +15,6 @@ interface ModalProps {
 }
 
 const Modal = ({
-  visible,
   onCancel,
   clsPrefix,
   children,

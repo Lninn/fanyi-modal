@@ -39,8 +39,11 @@ const App = () => {
   const appState = useStore(store)
 
   React.useEffect(() => {
-    const handleUserClick = (evt: { target: any }) => {
-      const target = evt.target
+    const handleUserClick = (evt: MouseEvent) => {
+      // todo
+      const target = evt.target as HTMLDivElement
+
+      if (!target) return
 
       const clsSelector = `#${APP_ID}`
       if (!target.closest(clsSelector)) {
@@ -81,7 +84,7 @@ const reject = () => {
 }
 
 const __main = () => {
-  const onRuntimeMessage = (message: IMessage, _: any, sendResponse: (response: any) => void) => {
+  const onRuntimeMessage = (message: IMessage, _: chrome.runtime.MessageSender, sendResponse: (response?: boolean) => void) => {
     let appState
 
     if (message.type === "start") {
