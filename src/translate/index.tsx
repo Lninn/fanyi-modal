@@ -84,7 +84,11 @@ const reject = () => {
 }
 
 const __main = () => {
-  const onRuntimeMessage = (message: IMessage, _: chrome.runtime.MessageSender, sendResponse: (response?: boolean) => void) => {
+  const onRuntimeMessage = (
+    message: IMessage,
+    _: chrome.runtime.MessageSender,
+    sendResponse: (response?: boolean) => void,
+  ) => {
     let appState
 
     if (message.type === "start") {

@@ -22,7 +22,7 @@ function main() {
 
 function createContextMenus() {
   const selectProperties: chrome.contextMenus.CreateProperties = {
-    title: COMMEND_ID + " \"%s\"",
+    title: COMMEND_ID + ' "%s"',
     id: COMMEND_ID,
     contexts: ["selection"],
   }
