@@ -2,18 +2,29 @@
 
 .@{prefix} {
   &-saveItem {
+    font-size: 14px;
+    line-height: 1.675;
+
+    padding: 12px;
+
     display: flex;
     flex-direction: column;
 
     border-top: 1px solid #e5e5e5;
 
-    & + & {
-      margin-top: 12px;
-    }
-
     &-header {
       display: flex;
       justify-content: space-between;
+      font-size: 14px;
+      line-height: 1;
+
+      &-btn {
+        color: orange;
+      }
+    }
+
+    &-content {
+      margin-top: 12px;
     }
   }
 
@@ -36,6 +47,47 @@
       &-prev, &-next {
         cursor: pointer;
       }
+    }
+  }
+
+  &-pagination {
+    display: flex;
+    align-items: center;
+
+    margin-left: 12px;
+    margin-right: 8px;
+
+    font-size: 14px;
+
+    &-no {
+      * + * {
+        margin-left: 4px;
+      }
+    }
+
+    &-total {
+      margin-left: 12px;
+    }
+
+    &-prev, &-next {
+      display: inline-flex;
+      align-items: center;
+
+      cursor: pointer;
+
+      font-size: 1.2rem;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+
+    &-prev {
+      margin-left: auto;
+    }
+
+    &-next {
+      margin-left: 12px;
     }
   }
 }

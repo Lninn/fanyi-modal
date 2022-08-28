@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { creatTransItemList } from "./Document"
 import { TransItem } from "./type"
+import StartIcon from "./assets/star"
+import GreaterIcon from "./assets/greater"
+import LessThanIcon from "./assets/lessThan"
 
 import "./History.less"
+
 
 type Fn = (...args: any[]) => any
 
@@ -18,6 +22,14 @@ function useEvent(callback: Fn) {
   }, [])
 
   return event
+}
+
+interface IPagination {
+  current: number
+  pageSize: number
+  total: number,
+  onPrev: () => void
+  onNext: () => void
 }
 
 const usePagination = ({ list }: { list: TransItem[] }) => {
@@ -43,16 +55,65 @@ const usePagination = ({ list }: { list: TransItem[] }) => {
     }
   })
 
-  const newList = list.slice(current - 1, (current - 1) * pageSize)
-
   return {
     current,
+    pageSize,
     total,
     onNext,
     onPrev,
-    list: newList,
   }
 }
+
+const getPageNo = (pagination: IPagination) => {
+  const { pageSize } = pagination
+  const current = pagination.current - 1
+
+  const start = current * pageSize + 1
+  const end = (current + 1) * pageSize + 1
+
+  return { start, end }
+}
+
+interface PaginationProps {
+  clsPrefix: string
+  pagination: IPagination
+}
+
+const Pagination = ({
+  pagination,
+  clsPrefix
+}: PaginationProps) => {
+  const { start, end } = getPageNo(pagination)
+
+  return (
+    <div className={`${clsPrefix}-pagination`}>
+      <div className={`${clsPrefix}-pagination-no`}>
+        <span>{start}</span>
+        <span>-</span>
+        <span>{end}</span>
+      </div>
+
+      <div className={`${clsPrefix}-pagination-total`}>
+        {pagination.total}
+      </div>
+
+      <div
+        className={`${clsPrefix}-pagination-prev`}
+        onClick={pagination.onPrev}
+      >
+        <LessThanIcon />
+      </div>
+
+      <div
+        className={`${clsPrefix}-pagination-next`}
+        onClick={pagination.onNext}
+      >
+        <GreaterIcon />
+      </div>
+    </div>
+  )
+}
+
 
 const Item = ({
   item,
@@ -71,12 +132,19 @@ const Item = ({
   return (
     <div className={`${clsPrefix}-saveItem`}>
       <div className={`${clsPrefix}-saveItem-header`}>
-        <div>cn-en</div>
-        <div onClick={handleItemClick}>✨</div>
+        <div>中文 - English</div>
+        <div
+          className={`${clsPrefix}-saveItem-header-btn`}
+          onClick={handleItemClick}
+        >
+          <StartIcon />
+        </div>
       </div>
 
-      <div className={`${clsPrefix}-saveItem-src`}>{item.src}</div>
-      <div className={`${clsPrefix}-saveItem-dst`}>{item.dst}</div>
+      <div className={`${clsPrefix}-saveItem-content`}>
+        <div className={`${clsPrefix}-saveItem-src`}>{item.src}</div>
+        <div className={`${clsPrefix}-saveItem-dst`}>{item.dst}</div>
+      </div>
     </div>
   )
 }
@@ -112,16 +180,17 @@ const History = ({ clsPrefix }: { clsPrefix: string }) => {
     <div className={`${clsPrefix}-history`}>
       <div>Header</div>
 
-      <div className={`${clsPrefix}-history-pagination`}>
-        <div>1-10</div>
-        <div className={`${clsPrefix}-history-pagination-total`}>100</div>
-
-        <div className={`${clsPrefix}-history-pagination-prev`}>prev</div>
-        <div className={`${clsPrefix}-history-pagination-next`}>next</div>
-      </div>
+      <Pagination
+        clsPrefix={clsPrefix}
+        pagination={pagination}
+      />
 
       <div>
-        <ItemList list={list} onClick={handleItemClick} clsPrefix={clsPrefix} />
+        <ItemList
+          clsPrefix={clsPrefix}
+          list={list}
+          onClick={handleItemClick}
+        />
       </div>
     </div>
   )
