@@ -88,13 +88,14 @@ const Pagination = ({
   return (
     <div className={`${clsPrefix}-pagination`}>
       <div className={`${clsPrefix}-pagination-no`}>
+        <span>当前:</span>
         <span>{start}</span>
         <span>-</span>
         <span>{end}</span>
       </div>
 
       <div className={`${clsPrefix}-pagination-total`}>
-        {pagination.total}
+        共 {pagination.total} 条
       </div>
 
       <div
@@ -159,7 +160,7 @@ const ItemList = ({
   clsPrefix: string
 }) => {
   return (
-    <div>
+    <div className={`${clsPrefix}-itemList`}>
       {list.map((item, idx) => {
         return <Item item={item} onClick={onClick} key={idx} clsPrefix={clsPrefix} />
       })}
@@ -178,20 +179,16 @@ const History = ({ clsPrefix }: { clsPrefix: string }) => {
 
   return (
     <div className={`${clsPrefix}-history`}>
-      <div>Header</div>
-
       <Pagination
         clsPrefix={clsPrefix}
         pagination={pagination}
       />
 
-      <div>
-        <ItemList
-          clsPrefix={clsPrefix}
-          list={list}
-          onClick={handleItemClick}
-        />
-      </div>
+      <ItemList
+        clsPrefix={clsPrefix}
+        list={list}
+        onClick={handleItemClick}
+      />
     </div>
   )
 }

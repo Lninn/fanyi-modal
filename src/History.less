@@ -1,61 +1,51 @@
 @prefix: TRANSLATE-APP;
 
 .@{prefix} {
+
+  &-history {
+    padding: 12px;
+  }
+
+  &-itemList {
+    margin-top: 12px;
+  }
+
   &-saveItem {
     font-size: 14px;
     line-height: 1.675;
 
-    padding: 12px;
-
     display: flex;
     flex-direction: column;
 
-    border-top: 1px solid #e5e5e5;
+    
+    & + & {
+      border-top: 1px solid #e5e5e5;
+      margin-top: 12px;
+    }
 
     &-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
+
       font-size: 14px;
       line-height: 1;
 
       &-btn {
+        font-size: 1.3rem;
+        line-height: 0;
         color: orange;
       }
     }
 
     &-content {
-      margin-top: 12px;
-    }
-  }
-
-  &-history {
-    &-pagination {
-      display: flex;
-
-      &-total {
-        margin-left: 12px;
-      }
-
-      &-prev {
-        margin-left: auto;
-      }
-
-      &-next {
-        margin-left: 12px;
-      }
-
-      &-prev, &-next {
-        cursor: pointer;
-      }
+      margin-top: 6px;
     }
   }
 
   &-pagination {
     display: flex;
     align-items: center;
-
-    margin-left: 12px;
-    margin-right: 8px;
 
     font-size: 14px;
 
