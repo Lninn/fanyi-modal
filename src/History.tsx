@@ -4,6 +4,7 @@ import { TransItem } from "./type"
 import StartIcon from "./assets/star"
 import GreaterIcon from "./assets/greater"
 import LessThanIcon from "./assets/lessThan"
+import classNames from "classnames"
 
 import "./History.less"
 
@@ -11,7 +12,7 @@ import "./History.less"
 type Fn = (...args: any[]) => any
 
 function useEvent(callback: Fn) {
-  const callbackRef = useRef<Fn | null>(null)
+  const callbackRef = useRef<Fn>(callback)
 
   callbackRef.current = callback
 
@@ -24,7 +25,8 @@ function useEvent(callback: Fn) {
   return event
 }
 
-interface IPagination {
+interface IPagination<T> {
+  list: T[]
   current: number
   pageSize: number
   total: number,
@@ -32,7 +34,29 @@ interface IPagination {
   onNext: () => void
 }
 
-const usePagination = ({ list }: { list: TransItem[] }) => {
+const getPageNo = (pagination: Pick<IPagination<TransItem>, "current" | "pageSize">) => {
+  const { pageSize } = pagination
+  const current = pagination.current - 1
+
+  const start = current * pageSize + 1
+  const end = (current + 1) * pageSize
+
+  return { start, end }
+}
+
+const canPrev = (current: number) => {
+  return current > 1
+}
+
+const canNext = (
+  { current, pageSize, total }: Pick<IPagination<TransItem>, "current" | "pageSize" | "total">
+) => {
+  const totalPage = total / pageSize
+
+  return current < totalPage
+}
+
+const usePagination = ({ list }: { list: TransItem[] }): IPagination<TransItem> => {
   const [current, setCurrent] = useState(1)
   const [pageSize] = useState(10)
   const [total, setTotal] = useState(0)
@@ -41,19 +65,19 @@ const usePagination = ({ list }: { list: TransItem[] }) => {
     setTotal(list.length)
   }, [list])
 
-  const totalPage = total / pageSize
-
   const onPrev = useEvent(() => {
-    if (current > 1) {
+    if (canPrev(current)) {
       setCurrent(current - 1)
     }
   })
 
   const onNext = useEvent(() => {
-    if (current < totalPage - 1) {
+    if (canNext({ current, pageSize, total })) {
       setCurrent(current + 1)
     }
   })
+
+  const { start, end } = getPageNo( { current, pageSize })
 
   return {
     current,
@@ -61,22 +85,13 @@ const usePagination = ({ list }: { list: TransItem[] }) => {
     total,
     onNext,
     onPrev,
+    list: list.slice(start, end)
   }
-}
-
-const getPageNo = (pagination: IPagination) => {
-  const { pageSize } = pagination
-  const current = pagination.current - 1
-
-  const start = current * pageSize + 1
-  const end = (current + 1) * pageSize + 1
-
-  return { start, end }
 }
 
 interface PaginationProps {
   clsPrefix: string
-  pagination: IPagination
+  pagination: IPagination<TransItem>
 }
 
 const Pagination = ({
@@ -84,6 +99,16 @@ const Pagination = ({
   clsPrefix
 }: PaginationProps) => {
   const { start, end } = getPageNo(pagination)
+
+  const prevCls = classNames(
+    `${clsPrefix}-pagination-prev`,
+    { "disabled": !canPrev(pagination.current) }
+  )
+
+  const nextCls = classNames(
+    `${clsPrefix}-pagination-next`,
+    { "disabled": !canNext(pagination) }
+  )
 
   return (
     <div className={`${clsPrefix}-pagination`}>
@@ -99,15 +124,17 @@ const Pagination = ({
       </div>
 
       <div
-        className={`${clsPrefix}-pagination-prev`}
+        className={prevCls}
         onClick={pagination.onPrev}
+        title="上一页"
       >
         <LessThanIcon />
       </div>
 
       <div
-        className={`${clsPrefix}-pagination-next`}
+        className={nextCls}
         onClick={pagination.onNext}
+        title="下一页"
       >
         <GreaterIcon />
       </div>
@@ -186,7 +213,7 @@ const History = ({ clsPrefix }: { clsPrefix: string }) => {
 
       <ItemList
         clsPrefix={clsPrefix}
-        list={list}
+        list={pagination.list}
         onClick={handleItemClick}
       />
     </div>
