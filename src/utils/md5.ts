@@ -132,17 +132,3 @@ export function md5(inputString: any) {
   }
   return rh(a) + rh(b) + rh(c) + rh(d)
 }
-
-export const debug = (...args: any[]) => {
-  console.log(...args)
-}
-
-export const log = {
-  info(...args: any[]) {
-    console.log("[info] ", ...args)
-  },
-
-  err(...args: any[]) {
-    console.log("[err] ", ...args)
-  },
-}

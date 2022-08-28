@@ -3,9 +3,8 @@ import "./Translate.less"
 import Translate from "./Translate"
 import React, { CSSProperties } from "react"
 import ReactDOM from "react-dom/client"
-import { createStore, useStore } from "@/store"
+import { createStore, useStore, log } from "@/utils"
 import { IMessage } from "@/action"
-import { log } from "@/utils"
 
 // / config
 const APP_ID = "CE-FANYI-ID"

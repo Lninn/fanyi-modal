@@ -1,8 +1,7 @@
-import { createTranslateUrl } from "./baidu"
 import { saveWord } from "@/service"
-import { log } from "./utils"
 import { TransItem } from "./type"
 import { IMessage } from "./action"
+import { createBaiduUrl, log } from "./utils"
 
 console.log("background.js ...")
 
@@ -61,7 +60,7 @@ async function handleTranslateClick(queryText: string) {
     type: "start",
   })
 
-  const url = createTranslateUrl(queryText)
+  const url = createBaiduUrl(queryText)
   const transItem = await baiduQuery(url)
 
   if (!transItem) {

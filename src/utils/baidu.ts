@@ -1,10 +1,10 @@
-import { md5 } from "./utils"
+import { md5 } from "./md5"
 
 const BAIDU_URL = "https://fanyi-api.baidu.com/api/trans/vip/translate"
 const APP_ID = import.meta.env.VITE_BAIDU_APP_ID
 const KEY = import.meta.env.VITE_BAIDU_APP_KEY
 
-export const createTranslateUrl = (q: any) => {
+export const createBaiduUrl = (q: any) => {
   const url = BAIDU_URL
 
   const salt = new Date().getTime()
