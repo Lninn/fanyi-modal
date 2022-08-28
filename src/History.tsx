@@ -6,7 +6,8 @@ import GreaterIcon from "./assets/greater"
 import LessThanIcon from "./assets/lessThan"
 import classNames from "classnames"
 
-import "./History.less"
+// TODO 打包时 history 样式 和 translate 样式有冲突
+// import "./History.less"
 
 
 type Fn = (...args: any[]) => any
