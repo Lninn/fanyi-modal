@@ -3,11 +3,11 @@ import Mock from "mockjs"
 import { IDocument, Lang, TransItem } from "./type"
 
 const mockWord = (lang: Lang) => {
-  if (lang === "cn") {
+  if (lang === "CN") {
     return Mock.mock("@cword(3,5)")
   }
 
-  if (lang === "en") {
+  if (lang === "EN") {
     return faker.word.noun()
   }
 
@@ -15,11 +15,11 @@ const mockWord = (lang: Lang) => {
 }
 
 const mockParagraph = (lang: Lang): string => {
-  if (lang === "cn") {
+  if (lang === "CN") {
     return Mock.mock("@cparagraph(1, 3)")
   }
 
-  if (lang === "en") {
+  if (lang === "EN") {
     return faker.lorem.paragraph()
   }
 
@@ -37,8 +37,8 @@ export const createDoc = (lang: Lang) => {
 
 export const createTransItem = () => {
   const item: TransItem = {
-    src: mockWord("cn"),
-    dst: mockWord("en"),
+    src: mockWord("CN"),
+    dst: mockWord("EN"),
   }
 
   return item

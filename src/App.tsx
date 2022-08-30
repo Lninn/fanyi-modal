@@ -1,9 +1,8 @@
-import History from "./History"
-
-const CLS_REEFIX = "TRANSLATE-APP"
+import Dialog from "./components/Dialog"
+import { createDoc } from "./Document"
 
 function App() {
-  return <History clsPrefix={CLS_REEFIX} />
+  return <Dialog source={createDoc("CN")}  target={createDoc("EN")}/>
 }
 
 export default App

@@ -1,4 +1,4 @@
-export type Lang = "cn" | "en"
+export type Lang = "CN" | "EN"
 
 export interface IDocument {
   lang: Lang

@@ -1,14 +1,14 @@
-type UserType = "arrow" | "copy" | "volume"
+export type IconType = "arrow" | "copy" | "volume" | "theme" | "star" | "lessThan" | "greater" | "collect"
 
-interface UserIcon {
+interface IconConfig {
   title: string
-  key: UserType
+  key: IconType
   svgDom: JSX.Element
 }
 
 // svg code from https://icones.js.org/
 
-export const icons: UserIcon[] = [
+export const ICON_CONFIGS: IconConfig[] = [
   {
     title: "箭头",
     key: "arrow",
@@ -57,10 +57,55 @@ export const icons: UserIcon[] = [
       </svg>
     )
   },
+  {
+    title: "主题",
+    key: "theme",
+    svgDom: (
+      <svg width='1em' height='1em' viewBox='0 0 24 24'>
+        <path
+          fill='currentColor'
+          d='M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10Zm0-2V4a8 8 0 1 1 0 16Z'
+        ></path>
+      </svg>
+    )
+  },
+  {
+    title: "前一页",
+    key: "greater",
+    svgDom: (
+      <svg width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fillRule="evenodd" d="m6.5 17.5l8.25-5.5L6.5 6.5l1-1.5L18 12L7.5 19z"></path></svg>
+    )
+  },
+  {
+    title: "收藏",
+    key: "star",
+    svgDom: (
+      <svg width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m5.825 22l1.625-7.025L2 10.25l7.2-.625L12 3l2.8 6.625l7.2.625l-5.45 4.725L18.175 22L12 18.275Z"></path></svg>
+    )
+  },
+  {
+    title: "后一页",
+    key: "lessThan",
+    svgDom: (
+      <svg width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" fillRule="evenodd" d="M17.5 17.5L9.25 12l8.25-5.5l-1-1.5L6 12l10.5 7z"></path></svg>
+    )
+  },
+  {
+    title: "收藏",
+    key: "collect",
+    svgDom: (
+      <svg width='1em' height='1em' viewBox='0 0 1024 1024'>
+        <path
+          fill='currentColor'
+          d='M256 128v698.88l196.032-156.864a96 96 0 0 1 119.936 0L768 826.816V128H256zm-32-64h576a32 32 0 0 1 32 32v797.44a32 32 0 0 1-51.968 24.96L531.968 720a32 32 0 0 0-39.936 0L243.968 918.4A32 32 0 0 1 192 893.44V96a32 32 0 0 1 32-32z'
+        ></path>
+      </svg>
+    )
+  },
 ]
 
-export const getIcon = (type: UserType) => {
-  const icon = icons.find(d => d.key === type)
+export const getIconConfig = (type: IconType) => {
+  const config = ICON_CONFIGS.find(d => d.key === type)
 
-  return icon
+  return config
 }
