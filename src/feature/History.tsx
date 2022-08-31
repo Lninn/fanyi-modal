@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { creatTransItemList } from "./Document"
-import { TransItem } from "./type"
+import { creatTransItemList } from "../Document"
+import { TransItem } from "../type"
 import classNames from "classnames"
-import Action from "./components/Action"
+import Action from "../components/Action"
 
 // TODO 打包时 history 样式 和 translate 样式有冲突
 import "./History.less"
@@ -163,7 +163,7 @@ const Item = ({
           className={`${clsPrefix}-saveItem-header-btn`}
           onClick={handleItemClick}
         >
-          <Action iconType="theme" />
+          <Action iconType="star" />
         </div>
       </div>
 

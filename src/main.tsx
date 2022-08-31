@@ -1,9 +1,8 @@
 import React, { CSSProperties } from "react"
 import ReactDOM from "react-dom/client"
 import { mockParagraph } from "./Document"
-import { Translate } from "./feature/Translate"
-import History from "./History"
 import { createStore, initialState, useStore } from "./store"
+import { Translate, History } from "./feature"
 
 const APP_ID = "CE-FANYI-ID"
 const CLS_REEFIX = "TRANSLATE-APP"
