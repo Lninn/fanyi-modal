@@ -2,9 +2,11 @@ import React, { CSSProperties } from "react"
 import ReactDOM from "react-dom/client"
 import { mockParagraph } from "./Document"
 import { Translate } from "./feature/Translate"
+import History from "./History"
 import { createStore, initialState, useStore } from "./store"
 
 const APP_ID = "CE-FANYI-ID"
+const CLS_REEFIX = "TRANSLATE-APP"
 
 export const store = createStore(initialState)
 
@@ -14,6 +16,8 @@ const App = () => {
   React.useEffect(() => {
     store.setState({
       visible: true,
+      left: 300,
+      top: 300,
       src: mockParagraph("CN"),
       dst: mockParagraph("EN")
     })
@@ -48,9 +52,13 @@ const App = () => {
     zIndex: 9999,
   }
 
-  return <Translate style={style} appState={appState} />
+  return (
+    <div style={{ display: "flex" }}>
+      <Translate style={style} appState={appState} />
+      <History clsPrefix={CLS_REEFIX} />
+    </div>
+  )
 }
-
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

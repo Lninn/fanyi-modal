@@ -5,7 +5,7 @@ import classNames from "classnames"
 import Action from "./components/Action"
 
 // TODO 打包时 history 样式 和 translate 样式有冲突
-// import "./History.less"
+import "./History.less"
 
 type Fn = (...args: any[]) => any
 
@@ -193,6 +193,7 @@ const ItemList = ({
   )
 }
 
+// TODO
 const History = ({ clsPrefix }: { clsPrefix: string }) => {
   const [list] = useState<TransItem[]>(creatTransItemList())
 
