@@ -31,3 +31,17 @@ export type TranslateAppState = {
   dst: string
 }
 
+export type IMessage =
+  | {
+      type: "start"
+    }
+  | {
+      type: "end"
+      payload: TransItem
+    }
+  | {
+      type: "error"
+    }
+  | {
+      type: "load-content"
+    }

@@ -12,7 +12,7 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, "index.html"),
         background: path.resolve(__dirname, "src/background.ts"),
-        translate: path.resolve(__dirname, "src/translate/index.tsx"),
+        content: path.resolve(__dirname, "src/content.ts"),
       },
       output: {
         sourcemap: "inline",

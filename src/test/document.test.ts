@@ -3,7 +3,7 @@ import { test, expect } from "vitest"
 import { createDoc, creatTransItemList } from "../Document"
 
 test("create Chinese document", () => {
-  const doc = createDoc("cn")
+  const doc = createDoc("CN")
 
   expect(doc).toMatchInlineSnapshot(`
     {
@@ -14,7 +14,7 @@ test("create Chinese document", () => {
 })
 
 test("create English document", () => {
-  const doc = createDoc("en")
+  const doc = createDoc("EN")
 
   expect(doc).toMatchInlineSnapshot(`
     {

@@ -22,12 +22,12 @@
     {
       "matches": ["<all_urls>"],
       "js": ["loader.js"],
-      "css": ["assets/index.css"]
+      "css": ["assets/Translate.css"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["translate.js", "assets/*"],
+      "resources": ["content.js", "assets/*"],
       "matches": ["<all_urls>"]
     }
   ]

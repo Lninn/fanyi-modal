@@ -1,14 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { creatTransItemList } from "./Document"
 import { TransItem } from "./type"
-import StartIcon from "./assets/star"
-import GreaterIcon from "./assets/greater"
-import LessThanIcon from "./assets/lessThan"
 import classNames from "classnames"
+import Action from "./components/Action"
 
 // TODO 打包时 history 样式 和 translate 样式有冲突
 // import "./History.less"
-
 
 type Fn = (...args: any[]) => any
 
@@ -129,7 +126,7 @@ const Pagination = ({
         onClick={pagination.onPrev}
         title="上一页"
       >
-        <LessThanIcon />
+        <Action iconType="lessThan" />
       </div>
 
       <div
@@ -137,7 +134,7 @@ const Pagination = ({
         onClick={pagination.onNext}
         title="下一页"
       >
-        <GreaterIcon />
+        <Action iconType="greater" />
       </div>
     </div>
   )
@@ -166,7 +163,7 @@ const Item = ({
           className={`${clsPrefix}-saveItem-header-btn`}
           onClick={handleItemClick}
         >
-          <StartIcon />
+          <Action iconType="theme" />
         </div>
       </div>
 

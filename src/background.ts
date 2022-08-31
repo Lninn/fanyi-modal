@@ -1,6 +1,5 @@
 import { saveWord } from "@/service"
-import { TransItem } from "./type"
-import { IMessage } from "./action"
+import { IMessage, TransItem } from "./type"
 import { createBaiduUrl, log } from "./utils"
 
 console.log("background.js ...")

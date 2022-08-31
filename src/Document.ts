@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker"
 import Mock from "mockjs"
 import { IDocument, Lang, TransItem } from "./type"
 
-const mockWord = (lang: Lang) => {
+export const mockWord = (lang: Lang) => {
   if (lang === "CN") {
     return Mock.mock("@cword(3,5)")
   }
@@ -14,7 +14,7 @@ const mockWord = (lang: Lang) => {
   return ""
 }
 
-const mockParagraph = (lang: Lang): string => {
+export const mockParagraph = (lang: Lang): string => {
   if (lang === "CN") {
     return Mock.mock("@cparagraph(1, 3)")
   }
