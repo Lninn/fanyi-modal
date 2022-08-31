@@ -1,8 +1,8 @@
-import Dialog from "./components/Dialog"
-import { createDoc } from "./Document"
+import Translate from "./feature/Translate"
+import { initialState } from "./store"
 
 function App() {
-  return <Dialog source={createDoc("CN")}  target={createDoc("EN")}/>
+  return <Translate appState={initialState} />
 }
 
 export default App

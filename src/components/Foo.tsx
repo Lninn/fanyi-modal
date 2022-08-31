@@ -1,36 +1,13 @@
-import "./Translate.less"
-
-import Translate from "./Translate"
+import Translate from "../feature/Translate"
 import React, { CSSProperties } from "react"
 import ReactDOM from "react-dom/client"
-import { createStore, useStore, log } from "@/utils"
 import { IMessage } from "@/action"
+import { createStore, initialState, useStore } from "@/store"
+import { log } from "@/utils"
 
 // / config
 const APP_ID = "CE-FANYI-ID"
 export const CLS_REEFIX = "TRANSLATE-APP"
-
-export type TranslateAppState = {
-  visible: boolean
-  loading: boolean
-
-  left: number
-  top: number
-
-  src: string
-  dst: string
-}
-
-const initialState: TranslateAppState = {
-  visible: false,
-  loading: false,
-
-  left: 0,
-  top: 0,
-
-  src: "-",
-  dst: "-",
-}
 
 export const store = createStore(initialState)
 

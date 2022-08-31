@@ -1,4 +1,16 @@
 import React from "react"
+import { TranslateAppState } from "./type";
+
+export const initialState: TranslateAppState = {
+  visible: false,
+  loading: false,
+
+  left: 0,
+  top: 0,
+
+  src: "-",
+  dst: "-",
+}
 
 type Listener = () => void
 

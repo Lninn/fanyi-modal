@@ -19,3 +19,15 @@ export type TransItem = {
   src: string
   dst: string
 }
+
+export type TranslateAppState = {
+  visible: boolean
+  loading: boolean
+
+  left: number
+  top: number
+
+  src: string
+  dst: string
+}
+
