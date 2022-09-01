@@ -2,10 +2,9 @@ import React, { CSSProperties } from "react"
 import ReactDOM from "react-dom/client"
 import { mockParagraph } from "./Document"
 import { createStore, initialState, useStore } from "./store"
-import { Translate, History } from "./feature"
+import { Translate } from "./feature"
 
 const APP_ID = "CE-FANYI-ID"
-const CLS_REEFIX = "TRANSLATE-APP"
 
 export const store = createStore(initialState)
 
@@ -54,7 +53,6 @@ const App = () => {
   return (
     <div style={{ display: "flex" }}>
       <Translate style={style} appState={appState} />
-      <History clsPrefix={CLS_REEFIX} />
     </div>
   )
 }
