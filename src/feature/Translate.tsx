@@ -2,7 +2,8 @@ import Action from "@/components/Action"
 import { createStore, initialState, useStore } from "@/store"
 import { ActionType, IDocument, Lang, TranslateAppState } from "@/type"
 import { copyTextToClip, playSound } from "@/utils"
-import React, { CSSProperties } from "react"
+import classNames from "classnames"
+import React, { CSSProperties, useContext, useEffect } from "react"
 import ReactDOM from "react-dom/client"
 
 import "./Translate.less"
@@ -37,19 +38,36 @@ const handleCommand = (type: ActionType, text?: string) => {
 
 type ITranslateContext = {
   onCommand: (type: ActionType, text?: string) => void
-  clsPrefix: string
+  clsPrefix: string,
+  theme: "light" | "dark",
+  toggleTheme: () => void
 }
 
 const initialTranslateContext: ITranslateContext = {
   onCommand: handleCommand,
   clsPrefix: CLS_REEFIX,
+  theme: "dark",
+  toggleTheme() { return }
 }
 
 export const TranslateContext = React.createContext(initialTranslateContext)
 
 export const TranslateProvider = ({ children }: { children: React.ReactNode }) => {
-  const [context] = React.useState(initialTranslateContext)
+  const [context, setContext] = React.useState(initialTranslateContext)
 
+  useEffect(() => {
+    const toggleTheme = () => {
+      setContext((prevCtx) => {
+        return {
+          ...prevCtx,
+          theme: prevCtx.theme === "dark" ? "light" : "dark"
+        }
+      })
+    }
+
+    setContext(p => ({ ...p, toggleTheme, }))
+  }, [])
+  
   return <TranslateContext.Provider value={context}>{children}</TranslateContext.Provider>
 }
 
@@ -79,6 +97,7 @@ const Panel = ({
 }
 
 export const Translate = ({ appState, style }: { appState: TranslateAppState; style?: CSSProperties }) => {
+  const { theme, toggleTheme } = useContext(TranslateContext)
   const source: IDocument = {
     lang: "CN",
     text: appState.src,
@@ -90,31 +109,34 @@ export const Translate = ({ appState, style }: { appState: TranslateAppState; st
   }
 
   const handleThemeClick = () => {
-    console.log("click theme")
+    toggleTheme()
   }
 
-  return (
-    <TranslateProvider>
-      <div className="translate" style={style}>
-        <div className="translate-header">
-          <div className="translate-header-language">
-            {LANGUAGE_MAP[source.lang]}
-            <Action iconType="arrow" />
-            {LANGUAGE_MAP[target.lang]}
-          </div>
+  const rootCls = classNames(
+    "translate",
+    [theme]
+  )
 
-          <div className="translate-header-setting">
-            <Action iconType="theme" onClick={handleThemeClick} />
-          </div>
+  return (
+    <div className={rootCls} style={style}>
+      <div className="translate-header">
+        <div className="translate-header-language">
+          {LANGUAGE_MAP[source.lang]}
+          <Action iconType="arrow" />
+          {LANGUAGE_MAP[target.lang]}
         </div>
 
-        <div className="translate-content">
-          <Panel text={source.text} />
-          <div className="line"></div>
-          <Panel text={target.text} />
+        <div className="translate-header-setting">
+          <Action iconType="theme" onClick={handleThemeClick} />
         </div>
       </div>
-    </TranslateProvider>
+
+      <div className="translate-content">
+        <Panel text={source.text} />
+        <div className="line"></div>
+        <Panel text={target.text} />
+      </div>
+    </div>
   )
 }
 
@@ -149,7 +171,11 @@ const App = () => {
     zIndex: 9999,
   }
 
-  return <Translate style={style} appState={appState} />
+  return (
+    <TranslateProvider>
+      <Translate style={style} appState={appState} />
+    </TranslateProvider>
+  )
 }
 
 const reject = () => {

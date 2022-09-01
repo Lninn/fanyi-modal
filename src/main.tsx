@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client"
 import { mockParagraph } from "./Document"
 import { createStore, initialState, useStore } from "./store"
 import { Translate } from "./feature"
+import { TranslateProvider } from "./feature/Translate"
 
 const APP_ID = "CE-FANYI-ID"
 
@@ -51,9 +52,11 @@ const App = () => {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <Translate style={style} appState={appState} />
-    </div>
+    <TranslateProvider>
+      <div style={{ display: "flex" }}>
+        <Translate style={style} appState={appState} />
+      </div>
+    </TranslateProvider>
   )
 }
 
