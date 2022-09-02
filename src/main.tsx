@@ -33,6 +33,8 @@ const App = () => {
     })
   }, [])
 
+  var a="asd"
+  
   React.useEffect(() => {
     const handleUserClick = (
       evt: MouseEvent,
