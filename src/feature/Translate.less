@@ -1,6 +1,7 @@
 :root {
   --theme-color: #333;
   --theme-bg-color: #fff;
+  --base-font-size: 14px;
 }
 
 .translate {
@@ -13,18 +14,20 @@
     --theme-bg-color: #fff;
   }
 
-  padding: 12px;
+  padding: 12px 16px;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
 
   color: var(--theme-color);
   background-color: var(--theme-bg-color);
+  font-size: var(--base-font-size);
   
   max-width: 300px;
 
   &-header {
     display: flex;
     align-items: center;
+    min-width: 240px;
   
     &-language {
       display: flex;
@@ -43,28 +46,25 @@
   &-content {
     margin-top: 12px;
 
-    font-size: 14px;
+    .line {
+      height: 1px;
+      background-color: #e5e5e5;
+    
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+  }
+
+  &-panel {
+    &-content {
+      margin-bottom: 12px;
+    }
+  
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
   }
 }
 
-.panel {
-  &-content {
-    margin-bottom: 12px;
-
-    min-height: 25px;
-  }
-
-  &-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-}
-
-.line {
-  height: 1px;
-  background-color: #e5e5e5;
-
-  margin-top: 12px;
-  margin-bottom: 8px;
-}

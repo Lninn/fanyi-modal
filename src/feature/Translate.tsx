@@ -42,8 +42,6 @@ type ITranslateContext = {
   toggleTheme: () => void;
 };
 
-const as = 'asd';
-
 const initialTranslateContext: ITranslateContext = {
   onCommand: handleCommand,
   clsPrefix: CLS_REEFIX,
@@ -77,27 +75,6 @@ export const TranslateProvider = ({ children }: { children: React.ReactNode }) =
   return <TranslateContext.Provider value={context}>{children}</TranslateContext.Provider>;
 };
 
-const Panel = ({ text }: { text: string }) => {
-  const handleCopyClick = () => {
-    copyTextToClip(text);
-  };
-
-  const handleVolumeClick = () => {
-    playSound(text);
-  };
-
-  return (
-    <div className="panel">
-      <div className="panel-content">{text}</div>
-
-      <div className="panel-actions">
-        <Action iconType="copy" onClick={handleCopyClick} />
-        <Action iconType="volume" onClick={handleVolumeClick} />
-      </div>
-    </div>
-  );
-};
-
 export const Translate = ({
   appState,
   style,
@@ -120,6 +97,18 @@ export const Translate = ({
     toggleTheme();
   };
 
+  const handleCopyClick = (text: string) => {
+    copyTextToClip(text);
+  };
+
+  const handleVolumeClick = (text: string) => {
+    playSound(text);
+  };
+
+  const handleArrowClick = () => {
+    console.log('handleArrowClick');
+  };
+
   const rootCls = classNames('translate', [theme]);
 
   return (
@@ -127,7 +116,7 @@ export const Translate = ({
       <div className="translate-header">
         <div className="translate-header-language">
           {LANGUAGE_MAP[source.lang]}
-          <Action iconType="arrow" />
+          <Action iconType="arrow" onClick={() => handleArrowClick()} />
           {LANGUAGE_MAP[target.lang]}
         </div>
 
@@ -137,9 +126,25 @@ export const Translate = ({
       </div>
 
       <div className="translate-content">
-        <Panel text={source.text} />
+        <div className="translate-panel">
+          <div className="translate-panel-content">{source.text}</div>
+
+          <div className="translate-panel-actions">
+            <Action iconType="copy" onClick={() => handleCopyClick(source.text)} />
+            <Action iconType="volume" onClick={() => handleVolumeClick(source.text)} />
+          </div>
+        </div>
+
         <div className="line"></div>
-        <Panel text={target.text} />
+
+        <div className="translate-panel">
+          <div className="translate-panel-content">{target.text}</div>
+
+          <div className="translate-panel-actions">
+            <Action iconType="copy" onClick={() => handleCopyClick(target.text)} />
+            <Action iconType="volume" onClick={() => handleVolumeClick(target.text)} />
+          </div>
+        </div>
       </div>
     </div>
   );

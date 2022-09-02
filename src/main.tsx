@@ -17,8 +17,8 @@ const App = () => {
       visible: true,
       left: 300,
       top: 300,
-      src: mockWord('CN'),
-      dst: mockWord('EN'),
+      src: mockParagraph('CN'),
+      dst: mockParagraph('EN'),
     });
   }, []);
 
