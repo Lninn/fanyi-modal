@@ -2,8 +2,16 @@ import React, { CSSProperties } from 'react';
 import ReactDOM from 'react-dom/client';
 import { mockParagraph, mockWord } from './Document';
 import { createStore, initialState, useStore } from './store';
-import { Translate } from './feature';
+import { Translate, History } from './feature';
 import { TranslateProvider } from './feature/Translate';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+
+const HistoryModal = NiceModal.create(() => {
+  const modal = useModal();
+  return <History clsPrefix="TRANSLATE-APP" visible={modal.visible} onCancel={modal.hide} />;
+});
+
+NiceModal.register('histroy', HistoryModal);
 
 const APP_ID = 'CE-FANYI-ID';
 
@@ -53,9 +61,7 @@ const App = () => {
 
   return (
     <TranslateProvider>
-      <div style={{ display: 'flex' }}>
-        <Translate style={style} appState={appState} />
-      </div>
+      <div style={{ display: 'flex' }}>hello</div>
     </TranslateProvider>
   );
 };

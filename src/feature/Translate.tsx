@@ -1,9 +1,10 @@
 import Action from '@/components/Action';
+import { useTargetIn } from '@/hooks';
 import { createStore, initialState, useStore } from '@/store';
 import { ActionType, IDocument, Lang, TranslateAppState } from '@/type';
 import { copyTextToClip, playSound } from '@/utils';
 import classNames from 'classnames';
-import React, { CSSProperties, useContext, useEffect } from 'react';
+import React, { CSSProperties, useContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import './Translate.less';
@@ -75,13 +76,20 @@ export const TranslateProvider = ({ children }: { children: React.ReactNode }) =
   return <TranslateContext.Provider value={context}>{children}</TranslateContext.Provider>;
 };
 
-export const Translate = ({
-  appState,
-  style,
-}: {
+interface TranslateProps {
   appState: TranslateAppState;
   style?: CSSProperties;
-}) => {
+  visible: boolean;
+  onClose: () => void;
+}
+
+export const Translate = ({ appState, style, visible, onClose }: TranslateProps) => {
+  const [ref] = useTargetIn({
+    clickInArea() {
+      onClose();
+    },
+  });
+
   const { theme, toggleTheme } = useContext(TranslateContext);
   const source: IDocument = {
     lang: 'CN',
@@ -109,10 +117,10 @@ export const Translate = ({
     console.log('handleArrowClick');
   };
 
-  const rootCls = classNames('translate', [theme]);
+  const rootCls = classNames('translate', [theme], { visible: visible });
 
   return (
-    <div className={rootCls} style={style}>
+    <div className={rootCls} style={style} ref={ref}>
       <div className="translate-header">
         <div className="translate-header-language">
           {LANGUAGE_MAP[source.lang]}
@@ -152,6 +160,7 @@ export const Translate = ({
 
 const App = () => {
   const appState = useStore(store);
+  const [visible, setVisible] = useState(false);
 
   React.useEffect(() => {
     const handleUserClick = (evt: MouseEvent) => {
@@ -185,7 +194,12 @@ const App = () => {
 
   return (
     <TranslateProvider>
-      <Translate style={style} appState={appState} />
+      <Translate
+        style={style}
+        appState={appState}
+        visible={visible}
+        onClose={() => setVisible(false)}
+      />
     </TranslateProvider>
   );
 };

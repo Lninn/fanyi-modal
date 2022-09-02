@@ -6,6 +6,7 @@ import Action from '../components/Action';
 
 // TODO 打包时 history 样式 和 translate 样式有冲突
 import './History.less';
+import { useTargetIn } from '@/hooks';
 
 type Fn = (...args: any[]) => any;
 
@@ -58,7 +59,7 @@ const canNext = ({
 
 const usePagination = ({ list }: { list: TransItem[] }): IPagination<TransItem> => {
   const [current, setCurrent] = useState(1);
-  const [pageSize] = useState(10);
+  const [pageSize] = useState(5);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -183,20 +184,35 @@ const ItemList = ({
   );
 };
 
-// TODO
-const History = ({ clsPrefix }: { clsPrefix: string }) => {
+interface HistoryProps {
+  clsPrefix: string;
+  visible: boolean;
+  onCancel: () => void;
+}
+
+const History = (props: HistoryProps) => {
   const [list] = useState<TransItem[]>(creatTransItemList());
 
   const pagination = usePagination({
     list,
   });
 
+  const [ref] = useTargetIn({
+    clickInArea() {
+      props.onCancel();
+    },
+  });
+
   const handleItemClick = () => {
     console.log('handleItemClick');
   };
 
+  const { clsPrefix } = props;
+
+  const finalCls = classNames(`${clsPrefix}-history`, { visible: props.visible });
+
   return (
-    <div className={`${clsPrefix}-history`}>
+    <div className={finalCls} ref={ref}>
       <Pagination clsPrefix={clsPrefix} pagination={pagination} />
 
       <ItemList clsPrefix={clsPrefix} list={pagination.list} onClick={handleItemClick} />
