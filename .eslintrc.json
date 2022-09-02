@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true
     },
     "extends": [
         "eslint:recommended",
@@ -24,9 +25,4 @@
         "@typescript-eslint",
         "prettier"
     ],
-    "rules": {
-        "react/react-in-jsx-scope": "off",
-        "spaced-comment": "error",
-        "no-duplicate-imports": "error"
-    }
 }

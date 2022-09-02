@@ -70,6 +70,8 @@ type ITranslateContext = {
   toggleTheme: () => void
 }
 
+const as="asd"
+
 const initialTranslateContext: ITranslateContext =
   {
     onCommand: handleCommand,
