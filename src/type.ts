@@ -1,50 +1,47 @@
-export type Lang = 'CN' | 'EN'
+export type Lang = 'CN' | 'EN';
 
 export interface IDocument {
-  lang: Lang
-  text: string
+  lang: Lang;
+  text: string;
 }
 
-export type ActionType =
-  | 'collect'
-  | 'sound'
-  | 'copy'
+export type ActionType = 'collect' | 'sound' | 'copy';
 
 export interface IAction {
-  type: ActionType
-  icon: JSX.Element
-  desc: string
+  type: ActionType;
+  icon: JSX.Element;
+  desc: string;
 }
 
-export type IActions = IAction[]
+export type IActions = IAction[];
 
 export type TransItem = {
-  src: string
-  dst: string
-}
+  src: string;
+  dst: string;
+};
 
 export type TranslateAppState = {
-  visible: boolean
-  loading: boolean
+  visible: boolean;
+  loading: boolean;
 
-  left: number
-  top: number
+  left: number;
+  top: number;
 
-  src: string
-  dst: string
-}
+  src: string;
+  dst: string;
+};
 
 export type IMessage =
   | {
-      type: 'start'
+      type: 'start';
     }
   | {
-      type: 'end'
-      payload: TransItem
+      type: 'end';
+      payload: TransItem;
     }
   | {
-      type: 'error'
+      type: 'error';
     }
   | {
-      type: 'load-content'
-    }
+      type: 'load-content';
+    };

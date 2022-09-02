@@ -1,21 +1,21 @@
 export interface IServer {
-  getList: () => any[]
-  add: () => void
-  remove: () => void
+  getList: () => any[];
+  add: () => void;
+  remove: () => void;
 }
 
 export class Server implements IServer {
   getList() {
-    return []
+    return [];
   }
 
   add() {
-    return
+    return;
   }
 
   remove() {
-    return
+    return;
   }
 }
 
-export default {}
+export default {};

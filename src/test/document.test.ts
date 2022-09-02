@@ -1,34 +1,31 @@
-import { test, expect } from 'vitest'
+import { test, expect } from 'vitest';
 
-import {
-  createDoc,
-  creatTransItemList,
-} from '../Document'
+import { createDoc, creatTransItemList } from '../Document';
 
 test('create Chinese document', () => {
-  const doc = createDoc('CN')
+  const doc = createDoc('CN');
 
   expect(doc).toMatchInlineSnapshot(`
     {
       "lang": "cn",
       "text": "该达这期主些因识个即气深无至书情技。局好照交热得一气效问些外许。标段叫写温很许转她边头价之。",
     }
-  `)
-})
+  `);
+});
 
 test('create English document', () => {
-  const doc = createDoc('EN')
+  const doc = createDoc('EN');
 
   expect(doc).toMatchInlineSnapshot(`
     {
       "lang": "en",
       "text": "Dolorem sunt blanditiis quis itaque dolores reiciendis commodi. Dolorem numquam alias nesciunt dignissimos est iusto. Voluptatem ut est quasi blanditiis et sunt voluptatibus. Consequuntur nisi vel in. Numquam maiores totam expedita non qui.",
     }
-  `)
-})
+  `);
+});
 
 test('create transItem list', () => {
-  const list = creatTransItemList()
+  const list = creatTransItemList();
 
   expect(list).toMatchInlineSnapshot(`
     [
@@ -93,5 +90,5 @@ test('create transItem list', () => {
         "src": "水",
       },
     ]
-  `)
-})
+  `);
+});

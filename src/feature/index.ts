@@ -1,4 +1,4 @@
-import { Translate } from './Translate'
-import History from './History'
+import { Translate } from './Translate';
+import History from './History';
 
-export { Translate, History }
+export { Translate, History };

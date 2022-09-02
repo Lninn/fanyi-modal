@@ -1,6 +1,6 @@
-import { test, expect } from 'vitest'
+import { test, expect } from 'vitest';
 
 test('a basic', () => {
-  const result = 1
-  expect(result).toBe(1)
-})
+  const result = 1;
+  expect(result).toBe(1);
+});
