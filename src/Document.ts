@@ -1,32 +1,44 @@
-import { faker } from "@faker-js/faker"
-import Mock from "mockjs"
-import { IDocument, Lang, TransItem } from "./type"
+import { faker } from '@faker-js/faker'
+import Mock from 'mockjs'
+import {
+  IDocument,
+  Lang,
+  TransItem,
+} from './type'
 
-export const mockWord = (lang: Lang) => {
-  if (lang === "CN") {
-    return Mock.mock("@cword(3,5)")
+export const mockWord = (
+  lang: Lang,
+) => {
+  if (lang === 'CN') {
+    return Mock.mock('@cword(3,5)')
   }
 
-  if (lang === "EN") {
+  if (lang === 'EN') {
     return faker.word.noun()
   }
 
-  return ""
+  return ''
 }
 
-export const mockParagraph = (lang: Lang): string => {
-  if (lang === "CN") {
-    return Mock.mock("@cparagraph(1, 3)")
+export const mockParagraph = (
+  lang: Lang,
+): string => {
+  if (lang === 'CN') {
+    return Mock.mock(
+      '@cparagraph(1, 3)',
+    )
   }
 
-  if (lang === "EN") {
+  if (lang === 'EN') {
     return faker.lorem.paragraph()
   }
 
-  return ""
+  return ''
 }
 
-export const createDoc = (lang: Lang) => {
+export const createDoc = (
+  lang: Lang,
+) => {
   const doc: IDocument = {
     lang,
     text: mockParagraph(lang),
@@ -37,24 +49,25 @@ export const createDoc = (lang: Lang) => {
 
 export const createTransItem = () => {
   const item: TransItem = {
-    src: mockWord("CN"),
-    dst: mockWord("EN"),
+    src: mockWord('CN'),
+    dst: mockWord('EN'),
   }
 
   return item
 }
 
-export const creatTransItemList = () => {
-  const list = []
+export const creatTransItemList =
+  () => {
+    const list = []
 
-  let COUNT = 30
+    let COUNT = 30
 
-  while (COUNT > 0) {
-    const item = createTransItem()
-    list.push(item)
+    while (COUNT > 0) {
+      const item = createTransItem()
+      list.push(item)
 
-    COUNT--
+      COUNT--
+    }
+
+    return list
   }
-
-  return list
-}

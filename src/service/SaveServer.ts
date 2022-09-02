@@ -1,11 +1,7 @@
-
-
 export interface IServer {
-
   getList: () => any[]
   add: () => void
   remove: () => void
-
 }
 
 export class Server implements IServer {
@@ -20,7 +16,6 @@ export class Server implements IServer {
   remove() {
     return
   }
-  
 }
 
 export default {}

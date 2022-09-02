@@ -1,6 +1,6 @@
-import { TransItem } from "@/type"
-import { log } from "@/utils"
-import * as Realm from "realm-web"
+import { TransItem } from '@/type'
+import { log } from '@/utils'
+import * as Realm from 'realm-web'
 
 // https://cloud.mongodb.com/v2#/org/62eea0aa00fc641fee06bf87/projects
 
@@ -11,11 +11,16 @@ interface IWord {
 }
 
 const login = async () => {
-  const APP_ID = "words-app-cupww"
-  const app = new Realm.App({ id: APP_ID })
+  const APP_ID = 'words-app-cupww'
+  const app = new Realm.App({
+    id: APP_ID,
+  })
 
-  const credentials = Realm.Credentials.anonymous()
-  const user = await app.logIn(credentials)
+  const credentials =
+    Realm.Credentials.anonymous()
+  const user = await app.logIn(
+    credentials,
+  )
 
   return user
 }
@@ -29,7 +34,9 @@ const getUser = async () => {
   return user
 }
 
-export const saveWord = async (transItem: TransItem) => {
+export const saveWord = async (
+  transItem: TransItem,
+) => {
   try {
     const doc: IWord = {
       from: transItem.src,
@@ -42,7 +49,9 @@ export const saveWord = async (transItem: TransItem) => {
     await user.functions.saveWord(doc)
   } catch (err: unknown) {
     if (err instanceof Error) {
-      log.err("[saveWord] " + err.message)
+      log.err(
+        '[saveWord] ' + err.message,
+      )
     }
   }
 }
@@ -51,7 +60,8 @@ export const queryWords = async () => {
   try {
     const user = await getUser()
 
-    const result = await user.functions.queryWords()
+    const result =
+      await user.functions.queryWords()
 
     return result
   } catch (err) {

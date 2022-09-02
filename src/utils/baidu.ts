@@ -1,10 +1,15 @@
-import { md5 } from "./md5"
+import { md5 } from './md5'
 
-const BAIDU_URL = "https://fanyi-api.baidu.com/api/trans/vip/translate"
-const APP_ID = import.meta.env.VITE_BAIDU_APP_ID
-const KEY = import.meta.env.VITE_BAIDU_APP_KEY
+const BAIDU_URL =
+  'https://fanyi-api.baidu.com/api/trans/vip/translate'
+const APP_ID = import.meta.env
+  .VITE_BAIDU_APP_ID
+const KEY = import.meta.env
+  .VITE_BAIDU_APP_KEY
 
-export const createBaiduUrl = (q: any) => {
+export const createBaiduUrl = (
+  q: any,
+) => {
   const url = BAIDU_URL
 
   const salt = new Date().getTime()
@@ -12,8 +17,8 @@ export const createBaiduUrl = (q: any) => {
 
   const params = {
     q,
-    from: "en",
-    to: "zh",
+    from: 'en',
+    to: 'zh',
     appid: APP_ID,
     salt,
     sign,
@@ -24,24 +29,34 @@ export const createBaiduUrl = (q: any) => {
   return finalUrl
 }
 
-const toSign = (q: any, salt: number) => {
+const toSign = (
+  q: any,
+  salt: number,
+) => {
   const s = `${APP_ID}${q}${salt}${KEY}`
 
   return md5(s)
 }
 
-const append = (url: string, params: any) => {
-  const qIdx = url.indexOf("?")
+const append = (
+  url: string,
+  params: any,
+) => {
+  const qIdx = url.indexOf('?')
   if (qIdx === -1) {
     url = `${url}?`
   }
 
-  return Object.keys(params).reduce((accu, next, idx) => {
-    const value = params[next]
-    const preFix = idx === 0 ? "" : "&"
+  return Object.keys(params).reduce(
+    (accu, next, idx) => {
+      const value = params[next]
+      const preFix =
+        idx === 0 ? '' : '&'
 
-    accu += `${preFix}${next}=${value}`
+      accu += `${preFix}${next}=${value}`
 
-    return accu
-  }, url)
+      return accu
+    },
+    url,
+  )
 }

@@ -1,10 +1,12 @@
-import { getIconConfig, IconType } from "@/assets/getIconConfig"
-import { TranslateContext } from "@/feature/Translate"
-import classNames from "classnames"
-import { useContext } from "react"
+import {
+  getIconConfig,
+  IconType,
+} from '@/assets/getIconConfig'
+import { TranslateContext } from '@/feature/Translate'
+import classNames from 'classnames'
+import { useContext } from 'react'
 
-import "./Action.less"
-
+import './Action.less'
 
 interface ActionProps {
   iconType: IconType
@@ -15,19 +17,28 @@ const Action = ({
   iconType,
   onClick,
 }: ActionProps) => {
-  const { clsPrefix } = useContext(TranslateContext)
+  const { clsPrefix } = useContext(
+    TranslateContext,
+  )
   const config = getIconConfig(iconType)
 
   if (!config) return null
 
   const cls = classNames(
     `${clsPrefix}-action`,
-    { [`${clsPrefix}-interactive`]: !!onClick }
+    {
+      [`${clsPrefix}-interactive`]:
+        !!onClick,
+    },
   )
 
   return (
-    <span className={cls} title={config.title} onClick={onClick}>
-     {config.svgDom}
+    <span
+      className={cls}
+      title={config.title}
+      onClick={onClick}
+    >
+      {config.svgDom}
     </span>
   )
 }

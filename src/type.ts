@@ -1,11 +1,14 @@
-export type Lang = "CN" | "EN"
+export type Lang = 'CN' | 'EN'
 
 export interface IDocument {
   lang: Lang
   text: string
 }
 
-export type ActionType = "collect" | "sound" | "copy"
+export type ActionType =
+  | 'collect'
+  | 'sound'
+  | 'copy'
 
 export interface IAction {
   type: ActionType
@@ -33,15 +36,15 @@ export type TranslateAppState = {
 
 export type IMessage =
   | {
-      type: "start"
+      type: 'start'
     }
   | {
-      type: "end"
+      type: 'end'
       payload: TransItem
     }
   | {
-      type: "error"
+      type: 'error'
     }
   | {
-      type: "load-content"
+      type: 'load-content'
     }
