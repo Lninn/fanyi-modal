@@ -1,12 +1,12 @@
 import Action from '@/components/Action';
 import { AppCtx } from '@/context';
-import { useTargetIn } from '@/hooks';
-import { IDocument, Lang, TranslateAppState } from '@/type';
+import { createDoc } from '@/Document';
+import { Lang } from '@/type';
 import { copyTextToClip, playSound } from '@/utils';
 import classNames from 'classnames';
-import React, { CSSProperties, useContext, useState } from 'react';
+import { useState } from 'react';
+import { useContext } from 'react';
 import ReactDOM from 'react-dom/client';
-import { AppCtxProvider } from './AppCtxProvider';
 
 import './Translate.less';
 
@@ -17,30 +17,10 @@ const LANGUAGE_MAP: Record<Lang, string> = {
 const APP_ID = 'CE-FANYI-ID';
 export const CLS_REEFIX = 'TRANSLATE-APP';
 
-interface TranslateProps {
-  appState: TranslateAppState;
-  style?: CSSProperties;
-  visible: boolean;
-  onClose: () => void;
-}
-
-export const Translate = ({ appState, style, visible, onClose }: TranslateProps) => {
-  const [ref] = useTargetIn({
-    clickInArea() {
-      onClose();
-    },
-  });
-
+export const Translate = () => {
   const { theme, toggleTheme } = useContext(AppCtx);
-  const source: IDocument = {
-    lang: 'CN',
-    text: appState.src,
-  };
-
-  const target: IDocument = {
-    lang: 'EN',
-    text: appState.dst,
-  };
+  const [source] = useState(createDoc('CN'));
+  const [target] = useState(createDoc('EN'));
 
   const handleThemeClick = () => {
     toggleTheme();
@@ -58,10 +38,10 @@ export const Translate = ({ appState, style, visible, onClose }: TranslateProps)
     console.log('handleArrowClick');
   };
 
-  const rootCls = classNames('translate', [theme], { visible: visible });
+  const rootCls = classNames('translate', [theme]);
 
   return (
-    <div className={rootCls} style={style} ref={ref}>
+    <div className={rootCls}>
       <div className="translate-header">
         <div className="translate-header-language">
           {LANGUAGE_MAP[source.lang]}
@@ -99,61 +79,6 @@ export const Translate = ({ appState, style, visible, onClose }: TranslateProps)
   );
 };
 
-const App = () => {
-  const appState = {
-    visible: false,
-    loading: false,
-
-    left: 0,
-    top: 0,
-
-    src: '-',
-    dst: '-',
-  };
-  const [visible, setVisible] = useState(false);
-
-  React.useEffect(() => {
-    const handleUserClick = (evt: MouseEvent) => {
-      // todo
-      const target = evt.target as HTMLDivElement;
-
-      if (!target) return;
-
-      const clsSelector = `#${APP_ID}`;
-      if (!target.closest(clsSelector)) {
-        // store.setState({
-        //   visible: false,
-        // });
-      }
-    };
-
-    window.addEventListener('click', handleUserClick);
-
-    return () => {
-      window.removeEventListener('click', handleUserClick);
-    };
-  }, []);
-
-  const style: CSSProperties = {
-    position: 'absolute',
-    left: appState.left,
-    top: appState.top,
-    display: appState.visible ? 'block' : 'none',
-    zIndex: 9999,
-  };
-
-  return (
-    <AppCtxProvider>
-      <Translate
-        style={style}
-        appState={appState}
-        visible={visible}
-        onClose={() => setVisible(false)}
-      />
-    </AppCtxProvider>
-  );
-};
-
 const reject = () => {
   let rootDom = document.getElementById(APP_ID);
 
@@ -166,7 +91,7 @@ const reject = () => {
 
   const root = ReactDOM.createRoot(rootDom);
 
-  root.render(<App />);
+  root.render(<Translate />);
 };
 
 export default reject;

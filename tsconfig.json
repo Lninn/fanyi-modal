@@ -20,6 +20,6 @@
     },
     "types": ["chrome", "vite/client"]
   },
-  "include": ["src", "public/loader.ts"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

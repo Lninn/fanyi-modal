@@ -1,32 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
-interface TargetInProps {
-  clickInArea?: () => void;
-}
+type Callback = (...args: any[]) => unknown;
 
-export const useTargetIn = (props?: TargetInProps) => {
-  const ref = useRef<HTMLDivElement | null>(null);
+export function useEvent(callback: Callback) {
+  const callbackRef = useRef<Callback>(callback);
 
-  useEffect(() => {
-    const target = ref.current;
+  callbackRef.current = callback;
 
-    if (!target) return;
-
-    const handleClick = (evt: MouseEvent) => {
-      const clickTarget = evt.target as HTMLDivElement;
-      const isIn = target.contains(clickTarget);
-
-      if (isIn && props && props.clickInArea) {
-        props.clickInArea();
-      }
-    };
-
-    window.addEventListener('click', handleClick);
-
-    return () => {
-      window.removeEventListener('click', handleClick);
-    };
+  const event = useCallback((...args: any[]) => {
+    return callbackRef.current.apply(null, args);
   }, []);
 
-  return [ref] as const;
-};
+  return event;
+}
