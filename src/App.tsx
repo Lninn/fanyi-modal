@@ -1,6 +1,6 @@
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { AppCtxProvider } from './feature/AppCtxProvider';
-import { Button, Dialog } from '@/components';
+import { Button, Dialog, Drawer } from '@/components';
 import { History, Translate } from './feature';
 
 import './global.less';
@@ -44,6 +44,8 @@ const App = () => {
           <Button onClick={showHistory}>showHistory</Button>
           <Button onClick={showTranslate}>showTranslate</Button>
         </div>
+
+        <Drawer />
       </AppCtxProvider>
     </NiceModal.Provider>
   );

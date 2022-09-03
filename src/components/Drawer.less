@@ -1,0 +1,38 @@
+.Drawer {
+  &-wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
+
+  &-content {
+    padding: 12px;
+    background-color: #fff;
+    min-width: 300px;
+    height: 800px;
+  }
+}
+
+.animation-enter {
+  animation-duration: 1s;
+  animation-play-state: running;
+  animation-name: enter;
+}
+
+@keyframes enter {
+  from {
+    transform: translate(100%);
+  }
+  to {
+    transform: translate(0);
+  }
+}
+
+@keyframes leave {
+  from {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(100%);
+  }
+}
