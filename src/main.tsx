@@ -1,10 +1,9 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { mockParagraph, mockWord } from './Document';
-// import { createStore, initialState, useStore } from './store';
-import { Translate, History } from './feature';
-import { TranslateProvider } from './feature/Translate';
+import { mockParagraph } from './Document';
+import { History } from './feature';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import { AppCtxProvider } from './feature/AppCtxProvider';
 
 const HistoryModal = NiceModal.create(() => {
   const modal = useModal();
@@ -14,8 +13,6 @@ const HistoryModal = NiceModal.create(() => {
 NiceModal.register('histroy', HistoryModal);
 
 const APP_ID = 'CE-FANYI-ID';
-
-// export const store = createStore(initialState);
 
 const appState = {
   visible: false,
@@ -37,6 +34,8 @@ const App = () => {
     //   src: mockParagraph('CN'),
     //   dst: mockParagraph('EN'),
     // });
+
+    NiceModal.show('histroy');
   }, []);
 
   React.useEffect(() => {
@@ -61,11 +60,9 @@ const App = () => {
   }, []);
 
   return (
-    <TranslateProvider>
-      <div style={{ display: 'flex' }}>
-        <Translate appState={appState} visible={true} onClose={() => 1} />
-      </div>
-    </TranslateProvider>
+    <NiceModal.Provider>
+      <AppCtxProvider />;
+    </NiceModal.Provider>
   );
 };
 

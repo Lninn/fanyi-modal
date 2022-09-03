@@ -1,11 +1,12 @@
 import Action from '@/components/Action';
+import { AppCtx } from '@/context';
 import { useTargetIn } from '@/hooks';
-// import { createStore, initialState, useStore } from '@/store';
-import { ActionType, IDocument, Lang, TranslateAppState } from '@/type';
+import { IDocument, Lang, TranslateAppState } from '@/type';
 import { copyTextToClip, playSound } from '@/utils';
 import classNames from 'classnames';
-import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import React, { CSSProperties, useContext, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { AppCtxProvider } from './AppCtxProvider';
 
 import './Translate.less';
 
@@ -15,66 +16,6 @@ const LANGUAGE_MAP: Record<Lang, string> = {
 };
 const APP_ID = 'CE-FANYI-ID';
 export const CLS_REEFIX = 'TRANSLATE-APP';
-
-// export const store = createStore(initialState);
-
-const collectWord = (text?: string) => {
-  console.log('collect word ', text);
-};
-
-const handleCommand = (type: ActionType, text?: string) => {
-  switch (type) {
-    case 'collect':
-      collectWord(text);
-      break;
-    case 'copy':
-      copyTextToClip(text);
-      break;
-    case 'sound':
-      playSound(text);
-      break;
-  }
-};
-
-type ITranslateContext = {
-  onCommand: (type: ActionType, text?: string) => void;
-  clsPrefix: string;
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
-};
-
-const initialTranslateContext: ITranslateContext = {
-  onCommand: handleCommand,
-  clsPrefix: CLS_REEFIX,
-  theme: 'light',
-  toggleTheme() {
-    return;
-  },
-};
-
-export const TranslateContext = React.createContext(initialTranslateContext);
-
-export const TranslateProvider = ({ children }: { children: React.ReactNode }) => {
-  const [context, setContext] = React.useState(initialTranslateContext);
-
-  useEffect(() => {
-    const toggleTheme = () => {
-      setContext((prevCtx) => {
-        return {
-          ...prevCtx,
-          theme: prevCtx.theme === 'dark' ? 'light' : 'dark',
-        };
-      });
-    };
-
-    setContext((p) => ({
-      ...p,
-      toggleTheme,
-    }));
-  }, []);
-
-  return <TranslateContext.Provider value={context}>{children}</TranslateContext.Provider>;
-};
 
 interface TranslateProps {
   appState: TranslateAppState;
@@ -90,7 +31,7 @@ export const Translate = ({ appState, style, visible, onClose }: TranslateProps)
     },
   });
 
-  const { theme, toggleTheme } = useContext(TranslateContext);
+  const { theme, toggleTheme } = useContext(AppCtx);
   const source: IDocument = {
     lang: 'CN',
     text: appState.src,
@@ -202,14 +143,14 @@ const App = () => {
   };
 
   return (
-    <TranslateProvider>
+    <AppCtxProvider>
       <Translate
         style={style}
         appState={appState}
         visible={visible}
         onClose={() => setVisible(false)}
       />
-    </TranslateProvider>
+    </AppCtxProvider>
   );
 };
 

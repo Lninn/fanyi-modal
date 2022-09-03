@@ -1,5 +1,5 @@
 import { getIconConfig, IconType } from '@/assets/getIconConfig';
-import { TranslateContext } from '@/feature/Translate';
+import { AppCtx } from '@/context';
 import classNames from 'classnames';
 import { useContext } from 'react';
 
@@ -11,7 +11,7 @@ interface ActionProps {
 }
 
 const Action = ({ iconType, onClick }: ActionProps) => {
-  const { clsPrefix } = useContext(TranslateContext);
+  const { clsPrefix } = useContext(AppCtx);
   const config = getIconConfig(iconType);
 
   if (!config) return null;

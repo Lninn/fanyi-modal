@@ -5,11 +5,6 @@ const enum Language {
   En,
 }
 
-const enum Theme {
-  Light,
-  Dark,
-}
-
 /**
  * 页面执行的动作
  */
@@ -31,7 +26,6 @@ interface IAppState {
   dst: string | null;
   x: number;
   y: number;
-  theme: Theme;
   modalVisible: boolean;
 }
 
@@ -42,7 +36,6 @@ const appState: IAppState = {
   dst: null,
   x: 0,
   y: 0,
-  theme: Theme.Light,
   modalVisible: false,
 };
 
