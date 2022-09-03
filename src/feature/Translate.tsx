@@ -1,6 +1,6 @@
 import Action from '@/components/Action';
 import { useTargetIn } from '@/hooks';
-import { createStore, initialState, useStore } from '@/store';
+// import { createStore, initialState, useStore } from '@/store';
 import { ActionType, IDocument, Lang, TranslateAppState } from '@/type';
 import { copyTextToClip, playSound } from '@/utils';
 import classNames from 'classnames';
@@ -16,7 +16,7 @@ const LANGUAGE_MAP: Record<Lang, string> = {
 const APP_ID = 'CE-FANYI-ID';
 export const CLS_REEFIX = 'TRANSLATE-APP';
 
-export const store = createStore(initialState);
+// export const store = createStore(initialState);
 
 const collectWord = (text?: string) => {
   console.log('collect word ', text);
@@ -159,7 +159,16 @@ export const Translate = ({ appState, style, visible, onClose }: TranslateProps)
 };
 
 const App = () => {
-  const appState = useStore(store);
+  const appState = {
+    visible: false,
+    loading: false,
+
+    left: 0,
+    top: 0,
+
+    src: '-',
+    dst: '-',
+  };
   const [visible, setVisible] = useState(false);
 
   React.useEffect(() => {
@@ -171,9 +180,9 @@ const App = () => {
 
       const clsSelector = `#${APP_ID}`;
       if (!target.closest(clsSelector)) {
-        store.setState({
-          visible: false,
-        });
+        // store.setState({
+        //   visible: false,
+        // });
       }
     };
 

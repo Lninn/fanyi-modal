@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react';
 import ReactDOM from 'react-dom/client';
 import { mockParagraph, mockWord } from './Document';
-import { createStore, initialState, useStore } from './store';
+// import { createStore, initialState, useStore } from './store';
 import { Translate, History } from './feature';
 import { TranslateProvider } from './feature/Translate';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
@@ -15,19 +15,28 @@ NiceModal.register('histroy', HistoryModal);
 
 const APP_ID = 'CE-FANYI-ID';
 
-export const store = createStore(initialState);
+// export const store = createStore(initialState);
+
+const appState = {
+  visible: false,
+  loading: false,
+
+  left: 300,
+  top: 300,
+
+  src: mockParagraph('CN'),
+  dst: mockParagraph('EN'),
+};
 
 const App = () => {
-  const appState = useStore(store);
-
   React.useEffect(() => {
-    store.setState({
-      visible: true,
-      left: 300,
-      top: 300,
-      src: mockParagraph('CN'),
-      dst: mockParagraph('EN'),
-    });
+    // store.setState({
+    //   visible: true,
+    //   left: 300,
+    //   top: 300,
+    //   src: mockParagraph('CN'),
+    //   dst: mockParagraph('EN'),
+    // });
   }, []);
 
   React.useEffect(() => {
@@ -51,17 +60,11 @@ const App = () => {
     };
   }, []);
 
-  const style: CSSProperties = {
-    position: 'absolute',
-    left: appState.left,
-    top: appState.top,
-    display: appState.visible ? 'block' : 'none',
-    zIndex: 9999,
-  };
-
   return (
     <TranslateProvider>
-      <div style={{ display: 'flex' }}>hello</div>
+      <div style={{ display: 'flex' }}>
+        <Translate appState={appState} visible={true} onClose={() => 1} />
+      </div>
     </TranslateProvider>
   );
 };

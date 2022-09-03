@@ -1,5 +1,5 @@
 import { log } from '@/utils';
-import reject, { store } from './feature/Translate';
+import reject from './feature/Translate';
 import { IMessage } from './type';
 
 // https://blog.saeloun.com/2021/12/30/react-18-usesyncexternalstore-api
@@ -29,7 +29,7 @@ const onRuntimeMessage = (
   }
 
   if (appState) {
-    store.setState(appState);
+    // store.setState(appState);
   }
 
   sendResponse(true);
@@ -38,16 +38,16 @@ const onRuntimeMessage = (
 const handleMouseUp = (evt: MouseEvent) => {
   const selection = document.getSelection();
 
-  if (!selection || store.getState().visible) return;
+  // if (!selection || store.getState().visible) return;
 
-  if (selection.type === 'Range') {
-    const { pageX, pageY } = evt;
+  // if (selection.type === 'Range') {
+  //   const { pageX, pageY } = evt;
 
-    store.setState({
-      left: pageX,
-      top: pageY,
-    });
-  }
+  //   store.setState({
+  //     left: pageX,
+  //     top: pageY,
+  //   });
+  // }
 };
 
 const main = () => {
