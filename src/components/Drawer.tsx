@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactNode } from 'react';
-import { CSSTransition } from './CSSTransition';
+import { Motion } from './Motion';
 
 import './Drawer.less';
 
@@ -31,10 +31,10 @@ Panel.displayName = 'Panel';
 
 export const Drawer = (props: DrawerProps) => {
   return (
-    <CSSTransition visible={props.visible}>
+    <Motion visible={props.visible}>
       {(transitionProps, transitionRef) => {
         return <Panel {...props} className={transitionProps.className} ref={transitionRef} />;
       }}
-    </CSSTransition>
+    </Motion>
   );
 };

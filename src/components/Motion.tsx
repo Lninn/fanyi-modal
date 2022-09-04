@@ -2,7 +2,7 @@ import { useEvent } from '@/hooks';
 import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
 
-interface IProps {
+interface MotionProps {
   visible: boolean;
   children?: (
     props: {
@@ -24,7 +24,7 @@ const transitionCls = (status: Status) => {
   }
 };
 
-export const CSSTransition = (props: IProps) => {
+export const Motion = (props: MotionProps) => {
   const { visible, children } = props;
 
   const nodeRef = useRef<HTMLDivElement | null>(null);
@@ -86,4 +86,4 @@ export const CSSTransition = (props: IProps) => {
   return transitionChildren;
 };
 
-CSSTransition.displayName = 'CSSTransition';
+Motion.displayName = 'Motion';
