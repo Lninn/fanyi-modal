@@ -30,7 +30,7 @@ const DrawerModal = NiceModal.create(() => {
 
   return (
     <Drawer visible={modal.visible} onClose={modal.hide}>
-      <Translate />
+      <History clsPrefix="TRANSLATE-APP" />
       <Button onClick={modal.hide}>Close</Button>
     </Drawer>
   );
