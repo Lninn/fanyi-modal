@@ -25,8 +25,20 @@ const TranslateModal = NiceModal.create(() => {
   );
 });
 
+const DrawerModal = NiceModal.create(() => {
+  const modal = useModal();
+
+  return (
+    <Drawer visible={modal.visible} onClose={modal.hide}>
+      <Translate />
+      <Button onClick={modal.hide}>Close</Button>
+    </Drawer>
+  );
+});
+
 NiceModal.register('histroy', HistoryModal);
 NiceModal.register('translate', TranslateModal);
+NiceModal.register('drawer', DrawerModal);
 
 const App = () => {
   const showHistory = () => {
@@ -37,15 +49,18 @@ const App = () => {
     NiceModal.show('translate');
   };
 
+  const showDrawer = () => {
+    NiceModal.show('drawer');
+  };
+
   return (
     <NiceModal.Provider>
       <AppCtxProvider>
         <div style={{ margin: 30, display: 'flex', gap: 20 }}>
           <Button onClick={showHistory}>showHistory</Button>
           <Button onClick={showTranslate}>showTranslate</Button>
+          <Button onClick={showDrawer}>showDrawer</Button>
         </div>
-
-        <Drawer />
       </AppCtxProvider>
     </NiceModal.Provider>
   );

@@ -1,14 +1,26 @@
-import './Drawer.less';
+import { ReactNode } from 'react';
 import { CSSTransition } from './CSSTransition';
 
-export const Drawer = () => {
-  const foo = (props: { className: string; ref: React.ForwardedRef<HTMLDivElement> }) => (
-    <div className="Drawer-root">
-      <div className={`Drawer-wrap ${props.className}`} ref={props.ref}>
-        <div className="Drawer-content">Drawer</div>
-      </div>
-    </div>
-  );
+import './Drawer.less';
 
-  return <CSSTransition>{foo}</CSSTransition>;
+export interface DrawerProps {
+  visible: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+
+export const Drawer = (props: DrawerProps) => {
+  return (
+    <CSSTransition visible={props.visible}>
+      {(transitionProps, ref) => {
+        return (
+          <div className="Drawer-root">
+            <div className={`Drawer-wrap ${transitionProps.className}`} ref={ref}>
+              <div className="Drawer-content">{props.children}</div>
+            </div>
+          </div>
+        );
+      }}
+    </CSSTransition>
+  );
 };

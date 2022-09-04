@@ -14,12 +14,18 @@
 }
 
 .animation-enter {
+  animation-name: moveLeft;
   animation-duration: 1s;
   animation-play-state: running;
-  animation-name: enter;
 }
 
-@keyframes enter {
+.animation-leave {
+  animation-name: moveRight;
+  animation-duration: 1s;
+  animation-play-state: running;
+}
+
+@keyframes moveLeft {
   from {
     transform: translate(100%);
   }
@@ -28,11 +34,15 @@
   }
 }
 
-@keyframes leave {
+@keyframes moveRight {
   from {
     transform: translate(0);
   }
   to {
     transform: translate(100%);
   }
+}
+
+.hide {
+  display: none;
 }
