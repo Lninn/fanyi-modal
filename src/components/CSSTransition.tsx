@@ -55,6 +55,7 @@ export const CSSTransition = (props: IProps) => {
 
       if (crtStatus === 'enter') {
         element.classList.remove('animation-enter');
+        element.classList.remove('hide');
       } else if (crtStatus === 'leave') {
         element.classList.remove('animation-leave');
         element.classList.add('hide');
@@ -77,6 +78,7 @@ export const CSSTransition = (props: IProps) => {
   const transitionChildren = children(
     {
       className: transitionCls(status),
+      visible,
     },
     setNodeRef
   );

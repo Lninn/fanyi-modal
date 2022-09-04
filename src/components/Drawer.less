@@ -17,12 +17,14 @@
   animation-name: moveLeft;
   animation-duration: 1s;
   animation-play-state: running;
+  animation-fill-mode: forwards;
 }
 
 .animation-leave {
   animation-name: moveRight;
   animation-duration: 1s;
   animation-play-state: running;
+  animation-fill-mode: both;
 }
 
 @keyframes moveLeft {
@@ -44,5 +46,5 @@
 }
 
 .hide {
-  display: none;
+  transform: translate(100%);
 }
