@@ -1,12 +1,14 @@
-import { useEvent } from '@/hooks';
-import React, { useEffect, useState } from 'react';
-import { useRef } from 'react';
+import classNames from 'classnames';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+
+type MotionName = 'zoom' | 'move';
 
 interface MotionProps {
+  name?: MotionName;
   visible: boolean;
   children?: (
     props: {
-      visible?: boolean;
+      visible: boolean;
       className?: string;
       style?: React.CSSProperties;
     },
@@ -16,69 +18,68 @@ interface MotionProps {
 
 type Status = 'enter' | 'leave' | 'none';
 
-const transitionCls = (status: Status) => {
+const transitionCls = (name: MotionName, status: Status) => {
   if (status === 'enter') {
-    return 'animation-enter';
+    return classNames('animation animation-enter', name);
   } else if (status === 'leave') {
-    return 'animation-leave';
+    return classNames('animation animation-leave', name);
+  } else {
+    return '';
   }
 };
 
 export const Motion = (props: MotionProps) => {
-  const { visible, children } = props;
+  const { visible, name = 'zoom', children } = props;
+
+  const [syncVisible, setSyncVisible] = useState(visible);
 
   const nodeRef = useRef<HTMLDivElement | null>(null);
   const [status, setStatus] = useState<Status>('none');
 
-  const getStatus = useEvent(() => {
-    return status;
-  });
+  const handleAnimationEnd = useCallback(() => {
+    setStatus('none');
 
-  const getElement = () => {
-    return nodeRef.current;
-  };
+    if (!visible) {
+      setSyncVisible(false);
+    }
+  }, [visible]);
 
   useEffect(() => {
     if (visible) {
+      setSyncVisible(visible);
       setStatus('enter');
     } else {
       setStatus('leave');
     }
   }, [visible]);
 
+  const getElement = () => {
+    return nodeRef.current;
+  };
+
   useEffect(() => {
     const element = getElement();
     if (!element) return;
-
-    const handleAnimationEnd = () => {
-      const crtStatus = getStatus() as Status;
-
-      if (crtStatus === 'enter') {
-        element.classList.remove('animation-enter');
-        element.classList.remove('hide');
-      } else if (crtStatus === 'leave') {
-        element.classList.remove('animation-leave');
-        element.classList.add('hide');
-      }
-    };
 
     element.addEventListener('animationend', handleAnimationEnd);
 
     return () => {
       element.removeEventListener('animationend', handleAnimationEnd);
     };
-  }, []);
+  }, [handleAnimationEnd]);
 
   const setNodeRef = React.useCallback((node: any) => {
     nodeRef.current = node;
   }, []);
 
+  const className = transitionCls(name as MotionName, status);
+
   if (!children) return null;
 
   const transitionChildren = children(
     {
-      className: transitionCls(status),
-      visible,
+      className,
+      visible: syncVisible,
     },
     setNodeRef
   );

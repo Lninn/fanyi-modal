@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { ReactNode } from 'react';
 import { Motion } from './Motion';
 
 import './Drawer.less';
+import classNames from 'classnames';
 
 export interface DrawerProps {
   visible: boolean;
@@ -18,10 +19,17 @@ interface PanelProps {
 }
 
 const Panel = React.forwardRef<any, PanelProps>((props, ref) => {
+  const contentCls = classNames('Drawer-content', props.className);
+
+  // 离开的时候这里不能先设置
+  const wrapStl: CSSProperties = {
+    display: props.visible ? 'block' : 'none',
+  };
+
   return (
     <div className="Drawer-root">
-      <div className={`Drawer-wrap hide ${props.className}`} ref={ref}>
-        <div className="Drawer-content">{props.children}</div>
+      <div className="Drawer-wrap" style={wrapStl} ref={ref}>
+        <div className={contentCls}>{props.children}</div>
       </div>
     </div>
   );
@@ -29,11 +37,19 @@ const Panel = React.forwardRef<any, PanelProps>((props, ref) => {
 
 Panel.displayName = 'Panel';
 
-export const Drawer = (props: DrawerProps) => {
+export const Drawer = ({ visible, onClose, children }: DrawerProps) => {
   return (
-    <Motion visible={props.visible}>
+    <Motion name="move" visible={visible}>
       {(transitionProps, transitionRef) => {
-        return <Panel {...props} className={transitionProps.className} ref={transitionRef} />;
+        return (
+          <Panel
+            visible={transitionProps.visible}
+            onClose={onClose}
+            className={transitionProps.className}
+            ref={transitionRef}>
+            {children}
+          </Panel>
+        );
       }}
     </Motion>
   );

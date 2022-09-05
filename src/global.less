@@ -10,3 +10,69 @@ ul {
 li {
   list-style: none;
 }
+
+// 动画样式
+.animation {
+  animation-duration: 1.3s;
+  animation-fill-mode: both;
+
+  &.animation-enter {
+    animation-name: zoom-in;
+    animation-fill-mode: both;
+    animation-play-state: running;
+
+    &.move {
+      animation-name: move-in;
+    }
+  }
+
+  &.animation-leave {
+    animation-name: zoom-out;
+    animation-fill-mode: both;
+    animation-play-state: running;
+
+    &.move {
+      animation-name: move-out;
+    }
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: translate(100%);
+  }
+  to {
+    transform: translate(0);
+  }
+}
+
+@keyframes move-out {
+  from {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(100%);
+  }
+}
