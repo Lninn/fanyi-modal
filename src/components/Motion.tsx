@@ -9,7 +9,7 @@ interface MotionProps {
   children?: (
     props: {
       visible: boolean;
-      className?: string;
+      className: string;
       style?: React.CSSProperties;
     },
     ref: (node: any) => void
