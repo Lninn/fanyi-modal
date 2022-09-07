@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { AppCtx, defaultAppCtx, toggleTheme } from '@/context';
+import { creatTransItemList } from '@/Document';
 
 export const AppCtxProvider = ({ children }: { children?: React.ReactNode }) => {
   const [context, setContext] = React.useState(defaultAppCtx);
@@ -17,6 +18,7 @@ export const AppCtxProvider = ({ children }: { children?: React.ReactNode }) => 
     setContext((p) => ({
       ...p,
       toggleTheme: _toggleTheme,
+      list: creatTransItemList(),
     }));
   }, []);
 
