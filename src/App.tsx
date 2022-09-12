@@ -31,7 +31,6 @@ const DrawerModal = NiceModal.create(() => {
   return (
     <Drawer visible={modal.visible} onClose={modal.hide}>
       <History clsPrefix="TRANSLATE-APP" />
-      <Button onClick={modal.hide}>Close</Button>
     </Drawer>
   );
 });
@@ -54,15 +53,15 @@ const App = () => {
   };
 
   return (
-    <NiceModal.Provider>
-      <AppCtxProvider>
+    <AppCtxProvider>
+      <NiceModal.Provider>
         <div style={{ margin: 30, display: 'flex', gap: 20 }}>
           <Button onClick={showHistory}>showHistory</Button>
           <Button onClick={showTranslate}>showTranslate</Button>
           <Button onClick={showDrawer}>showDrawer</Button>
         </div>
-      </AppCtxProvider>
-    </NiceModal.Provider>
+      </NiceModal.Provider>
+    </AppCtxProvider>
   );
 };
 

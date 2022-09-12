@@ -1,6 +1,6 @@
-import { ActionType } from '@/type';
-import { copyTextToClip, playSound } from '@/utils';
 import React from 'react';
+import { ActionType, TransItem } from '@/type';
+import { copyTextToClip, playSound } from '@/utils';
 
 const CLS_REEFIX = 'TRANSLATE-APP';
 
@@ -14,6 +14,8 @@ type IAppCtx = {
   theme: Theme;
   onCommand: (type: ActionType, text?: string) => void;
   toggleTheme: () => void;
+
+  list: TransItem[];
 };
 
 const collectWord = (text?: string) => {
@@ -45,6 +47,7 @@ export const defaultAppCtx: IAppCtx = {
   toggleTheme() {
     return;
   },
+  list: [],
 };
 
 export const AppCtx = React.createContext(defaultAppCtx);

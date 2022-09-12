@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { creatTransItemList } from '../Document';
+import { useContext, useEffect, useState } from 'react';
 import { TransItem } from '../type';
 import classNames from 'classnames';
 import Action from '../components/Action';
+import { useEvent } from '@/hooks';
 
 // TODO 打包时 history 样式 和 translate 样式有冲突
 import './History.less';
-import { useEvent } from '@/hooks';
+import { AppCtx } from '@/context';
 
 interface IPagination<T> {
   list: T[];
@@ -172,9 +172,16 @@ interface HistoryProps {
   clsPrefix: string;
 }
 
-export const History = (props: HistoryProps) => {
-  const [list] = useState<TransItem[]>(creatTransItemList());
+const Header = ({ clsPrefix }: { clsPrefix: string }) => {
+  return (
+    <div className={`${clsPrefix}-header`}>
+      <div className={`${clsPrefix}-header-title`}>收藏</div>
+    </div>
+  );
+};
 
+export const History = (props: HistoryProps) => {
+  const { list } = useContext(AppCtx);
   const pagination = usePagination({
     list,
   });
@@ -187,6 +194,8 @@ export const History = (props: HistoryProps) => {
 
   return (
     <div className={`${clsPrefix}-history`}>
+      <Header clsPrefix={clsPrefix} />
+
       <Pagination clsPrefix={clsPrefix} pagination={pagination} />
 
       <ItemList clsPrefix={clsPrefix} list={pagination.list} onClick={handleItemClick} />
