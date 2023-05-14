@@ -1,68 +1,35 @@
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import { AppCtxProvider } from './feature/AppCtxProvider';
-import { Button, Dialog, Drawer } from '@/components';
-import { History, Translate } from './feature';
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-import './global.less';
-
-const HistoryModal = NiceModal.create(() => {
-  const modal = useModal();
+function App() {
+  const [count, setCount] = useState(0)
 
   return (
-    <Dialog visible={modal.visible} onClose={modal.hide} centered>
-      <History clsPrefix="TRANSLATE-APP" />
-    </Dialog>
-  );
-});
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
+}
 
-const TranslateModal = NiceModal.create(() => {
-  const modal = useModal();
-
-  return (
-    <Dialog visible={modal.visible} onClose={modal.hide} centered>
-      <Translate />
-    </Dialog>
-  );
-});
-
-const DrawerModal = NiceModal.create(() => {
-  const modal = useModal();
-
-  return (
-    <Drawer visible={modal.visible} onClose={modal.hide}>
-      <History clsPrefix="TRANSLATE-APP" />
-    </Drawer>
-  );
-});
-
-NiceModal.register('histroy', HistoryModal);
-NiceModal.register('translate', TranslateModal);
-NiceModal.register('drawer', DrawerModal);
-
-const App = () => {
-  const showHistory = () => {
-    NiceModal.show('histroy');
-  };
-
-  const showTranslate = () => {
-    NiceModal.show('translate');
-  };
-
-  const showDrawer = () => {
-    NiceModal.show('drawer');
-  };
-
-  return (
-    <AppCtxProvider>
-      <NiceModal.Provider>
-        <div style={{ margin: 30, display: 'flex', gap: 20 }}>
-          <Button onClick={showHistory}>showHistory</Button>
-          <Button onClick={showTranslate}>showTranslate</Button>
-          <Button onClick={showDrawer}>showDrawer</Button>
-        </div>
-      </NiceModal.Provider>
-    </AppCtxProvider>
-  );
-};
-
-export default App;
+export default App
