@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
 import './dialog.less'
 
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from "react-dom"
 import { createRoot } from 'react-dom/client'
 
@@ -8,8 +8,9 @@ import { createRoot } from 'react-dom/client'
 // https://css-tricks.com/updating-a-css-variable-with-javascript/
 
 const DIALOG_WIDTH = 300
+const VIEW_WIDTH = document.documentElement.clientWidth
 
-function try_find_dialog(el: HTMLElement | null) {
+function is_closest_dialog(el: HTMLElement | null) {
   
   while(el) {
     if (el.classList.contains('wrap')) {
@@ -23,94 +24,82 @@ function try_find_dialog(el: HTMLElement | null) {
 }
 
 function Dialog() {
-  const ref = useRef<HTMLDivElement | null>(null)
-  const [selectedText, setSelectedText] = useState('')
+  const wrapRef = useRef<HTMLDivElement | null>(null)
 
-  const mouseDownRef = useRef({
-    x: 0,
-    y: 0,
-  })
+  const [selectedText, setSelectedText] = useState('')
+  const selectedTextRef = useRef(selectedText)
+  selectedTextRef.current = selectedText
+  
+  const [visible, setVisible] = useState(false)
+  
+  const openRef = useRef(visible)
+  openRef.current = visible
+
+  const downXRef = useRef(0)
   
   useEffect(() => {
+
     function handleMOuseDown(ev: PointerEvent) {
-      mouseDownRef.current.x = ev.pageX
-      mouseDownRef.current.y = ev.pageY
+      downXRef.current = ev.pageX
     }
   
     function handlePointerUp(ev: PointerEvent) {
-      const {
-        pageX,
-        pageY,
-      } = ev
+      const { pageX } = ev
 
       const target = ev.target as HTMLElement
-
-      if (try_find_dialog(target)) {
+      const wrap = wrapRef.current
+      if (
+        is_closest_dialog(target) ||
+        !wrap
+      ) {
         return
       }
 
+      const select_info = get_select_info()
+      if (!select_info) return
+      
+      const { text, rangeRect } = select_info
+      
+      const { x, y } = get_current_position(rangeRect, downXRef.current, pageX)
+      wrap.style.setProperty('--offset-top', y + "px")
+      wrap.style.setProperty('--offset-left', x + "px")
+
+      setSelectedText(text)
+      setVisible(true)
+    }
+
+    const handleClick = (ev: MouseEvent) => {
       const selection = window.getSelection()
       if (!selection) return
 
-      const range = selection.getRangeAt(0)
-      const rangeRect = range.getBoundingClientRect()
-
-      const { focusNode } = selection
-      if (!focusNode) return
-      const element = focusNode.parentElement
-      if (!element) return
-
-      const rect = element.getBoundingClientRect()
-      const { lineHeight } = window.getComputedStyle(element)
+      if (is_closest_dialog(ev.target as any)) {
+        return
+      }
       
-      const row = get_closest_value(rect, lineHeight, pageY)
-      const text = selection.toString()
-
-      if (text) {
-        const wrap = ref.current
-        
-        const offsetTop = row * parseInt(lineHeight) + rect.top
-        const offsetLeft = pageX
-
-        if (wrap) {
-          // wrap.style.setProperty('--offset-top', offsetTop + "px")
-          // wrap.style.setProperty('--offset-left', offsetLeft + "px")
-
-          let x = rangeRect.right
-          let y = rangeRect.bottom
-
-          const vw = document.documentElement.clientWidth
-          // const uw = 300
-
-          if (
-            (rangeRect.x + rangeRect.width + DIALOG_WIDTH) > vw
-          ) {
-            const calc_offset = x - DIALOG_WIDTH + (vw - rangeRect.right)
-            const click_offset = pageX > mouseDownRef.current.x ? pageX : mouseDownRef.current.x
-          
-            x = click_offset < calc_offset ? click_offset : calc_offset
-          }
-
-          wrap.style.setProperty('--offset-top', y + "px")
-          wrap.style.setProperty('--offset-left', x + "px")
-
-          setSelectedText(text);
-        }
+      if (openRef.current && selection.isCollapsed) {
+        setVisible(false)
       }
     }
 
+    window.addEventListener('click', handleClick)
     window.addEventListener('pointerup', handlePointerUp)
     window.addEventListener('pointerdown', handleMOuseDown)
     
     return () => {
       window.removeEventListener('pointerup', handlePointerUp)
       window.removeEventListener('pointerdown', handleMOuseDown)
+      window.removeEventListener('click', handleClick)
     }
   }, [])
 
+  const stl: React.CSSProperties = {
+    opacity: visible ? 1 : 0,
+    width: DIALOG_WIDTH,
+  }
+
   const dom = (
-    <div className="wrap" ref={ref}>
-      <div className='dialog' style={{ width: DIALOG_WIDTH }}>
+    <div className="wrap" ref={wrapRef}>
+      <div className='dialog' style={stl}>
         <h4>Translate</h4>
         <div>{selectedText}</div>
         <hr />
@@ -122,20 +111,38 @@ function Dialog() {
   return dom
 }
 
-function get_closest_value(
-  sourceRect: DOMRect,
-  lineHeight: string,
-  targetValue: number,
+function get_select_info() {
+  const selection = window.getSelection()
+  if (!selection) return null
+
+  const range = selection.getRangeAt(0)
+  const rangeRect = range.getBoundingClientRect()
+
+  const text = selection.toString()
+
+  return {
+    text,
+    rangeRect,
+  }
+}
+
+function get_current_position(
+  rangeRect: DOMRect,
+  downX: number,
+  upX: number
 ) {
-  const { top } = sourceRect
+  let x = rangeRect.right
 
-  const diff = targetValue - top
+  if (
+    (rangeRect.x + rangeRect.width + DIALOG_WIDTH) > VIEW_WIDTH
+  ) {
+    const calc_offset = x - DIALOG_WIDTH + (VIEW_WIDTH - rangeRect.right)
+    const click_offset = upX > downX ? upX : downX
+  
+    x = click_offset < calc_offset ? click_offset : calc_offset
+  }
 
-  const row = Math.ceil(
-    diff / parseInt(lineHeight)
-  )
-
-  return row
+  return { x, y: rangeRect.bottom }
 }
 
 export function create_dialog() {
