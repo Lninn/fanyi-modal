@@ -1,6 +1,8 @@
 .wrap {
   --offset-top: 100px;
   --offset-left: 100px;
+
+  line-height: 1.5;
 }
 
 .dialog {
@@ -11,9 +13,25 @@
 
   color: #242424;
   background: #fff;
-  padding: 6px;
+  padding: 8px 16px;
   border: 1px solid;
   border-radius: 3px;
 
   transition: all 0.375s;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.text {
+  margin-top: 4px;
+}
+
+.select_title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
