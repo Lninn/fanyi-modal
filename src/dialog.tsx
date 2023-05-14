@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './dialog.less'
 
 import { createPortal } from "react-dom"
@@ -7,18 +7,53 @@ import { createRoot } from 'react-dom/client'
 // ref set variable
 // https://css-tricks.com/updating-a-css-variable-with-javascript/
 
+const DIALOG_WIDTH = 300
+
+function try_find_dialog(el: HTMLElement | null) {
+  
+  while(el) {
+    if (el.classList.contains('wrap')) {
+      return true
+    }
+
+    el = el.parentElement
+  }
+
+  return false
+}
+
 function Dialog() {
   const ref = useRef<HTMLDivElement | null>(null)
+  const [selectedText, setSelectedText] = useState('')
+
+  const mouseDownRef = useRef({
+    x: 0,
+    y: 0,
+  })
   
   useEffect(() => {
+    function handleMOuseDown(ev: PointerEvent) {
+      mouseDownRef.current.x = ev.pageX
+      mouseDownRef.current.y = ev.pageY
+    }
+  
     function handlePointerUp(ev: PointerEvent) {
       const {
         pageX,
         pageY,
       } = ev
 
+      const target = ev.target as HTMLElement
+
+      if (try_find_dialog(target)) {
+        return
+      }
+
       const selection = window.getSelection()
       if (!selection) return
+
+      const range = selection.getRangeAt(0)
+      const rangeRect = range.getBoundingClientRect()
 
       const { focusNode } = selection
       if (!focusNode) return
@@ -38,23 +73,48 @@ function Dialog() {
         const offsetLeft = pageX
 
         if (wrap) {
-          wrap.style.setProperty('--offset-top', offsetTop + "px")
-          wrap.style.setProperty('--offset-left', offsetLeft + "px")
+          // wrap.style.setProperty('--offset-top', offsetTop + "px")
+          // wrap.style.setProperty('--offset-left', offsetLeft + "px")
+
+          let x = rangeRect.right
+          let y = rangeRect.bottom
+
+          const vw = document.documentElement.clientWidth
+          // const uw = 300
+
+          if (
+            (rangeRect.x + rangeRect.width + DIALOG_WIDTH) > vw
+          ) {
+            const calc_offset = x - DIALOG_WIDTH + (vw - rangeRect.right)
+            const click_offset = pageX > mouseDownRef.current.x ? pageX : mouseDownRef.current.x
+          
+            x = click_offset < calc_offset ? click_offset : calc_offset
+          }
+
+          wrap.style.setProperty('--offset-top', y + "px")
+          wrap.style.setProperty('--offset-left', x + "px")
+
+          setSelectedText(text);
         }
       }
     }
 
     window.addEventListener('pointerup', handlePointerUp)
+    window.addEventListener('pointerdown', handleMOuseDown)
     
     return () => {
       window.removeEventListener('pointerup', handlePointerUp)
+      window.removeEventListener('pointerdown', handleMOuseDown)
     }
   }, [])
 
   const dom = (
     <div className="wrap" ref={ref}>
-      <div className='dialog'>
-        dialog content
+      <div className='dialog' style={{ width: DIALOG_WIDTH }}>
+        <h4>Translate</h4>
+        <div>{selectedText}</div>
+        <hr />
+        <div>译文文本</div>
       </div>
     </div>
   )
