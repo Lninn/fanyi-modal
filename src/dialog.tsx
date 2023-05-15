@@ -1,6 +1,6 @@
 import './dialog.less'
 
-import { CSSProperties, SVGProps, useEffect, useRef, useState } from 'react'
+import { CSSProperties, SVGProps, useEffect, useReducer, useRef } from 'react'
 import { createPortal } from "react-dom"
 import { createRoot } from 'react-dom/client'
 
@@ -10,7 +10,7 @@ import { createRoot } from 'react-dom/client'
 // icon
 // ref https://icones.js.org/collection/svg-spinners
 
-const DIALOG_WIDTH = 300
+const DIALOG_WIDTH = 500
 const VIEW_WIDTH = document.documentElement.clientWidth
 
 function is_closest_dialog(el: HTMLElement | null) {
@@ -26,21 +26,52 @@ function is_closest_dialog(el: HTMLElement | null) {
   return false
 }
 
+interface AppState {
+  visible: boolean
+  loading: boolean
+  selectedText: string
+  resultText: string
+  isToggle: boolean
+  highLightRange: boolean
+  rangeRect: DOMRect | null
+}
+
+const initialState: AppState = {
+  visible: false,
+  loading: true,
+  selectedText: '',
+  resultText: '',
+  isToggle: true,
+  highLightRange: true,
+  rangeRect: null,
+}
+
+function reducer(c: AppState, n: Partial<AppState>) {
+  return { ...c, ...n }
+}
+
+function useAppState() {
+  const [
+    appState,
+    dispatch,
+  ] = useReducer(reducer, initialState)
+
+  return {
+    appState,
+    dispatch,
+  }
+}
+
 function Dialog() {
   const wrapRef = useRef<HTMLDivElement | null>(null)
 
-  const [selectedText, setSelectedText] = useState('')
-  const selectedTextRef = useRef(selectedText)
-  selectedTextRef.current = selectedText
-  
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [resultText, setResultText] = useState('')
+  const { appState, dispatch } = useAppState()
 
-  const [isToggle, setIsToggle] = useState(false)
+  const selectedTextRef = useRef(appState.selectedText)
+  selectedTextRef.current = appState.selectedText
   
-  const openRef = useRef(visible)
-  openRef.current = visible
+  const openRef = useRef(appState.visible)
+  openRef.current = appState.visible
 
   const downXRef = useRef(0)
   
@@ -71,8 +102,11 @@ function Dialog() {
       wrap.style.setProperty('--offset-top', y + "px")
       wrap.style.setProperty('--offset-left', x + "px")
 
-      setSelectedText(text)
-      setVisible(true)
+      dispatch({
+        visible: true,
+        selectedText: text,
+        rangeRect,
+      })
     }
 
     const handleClick = (ev: MouseEvent) => {
@@ -88,7 +122,7 @@ function Dialog() {
       }
       
       if (openRef.current && selection.isCollapsed) {
-        setVisible(false)
+        dispatch({ visible: false })
       }
     }
 
@@ -104,55 +138,132 @@ function Dialog() {
   }, [])
 
   useEffect(() => {
-    if (!selectedText) return
+    if (!appState.selectedText) return
 
-    setLoading(true)
-    query(selectedText).then(res => {
-      setResultText(res.text)
-    }).finally(() => setLoading(false))
-  }, [selectedText])
+    dispatch({ loading: true })    
+    query(appState.selectedText).then(res => {
+      dispatch({ resultText: res.text })
+    }).finally(() =>  dispatch({ loading: false }))
+  }, [appState.selectedText])
 
   const dialogStyle: React.CSSProperties = {
-    opacity: visible ? 1 : 0,
+    opacity: appState.visible ? 1 : 0,
     width: DIALOG_WIDTH,
   }
 
-  const resultTextStl: CSSProperties = loading ? {
+  const resultTextStl: CSSProperties = appState.loading ? {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: 100
   } : {}
 
-  const handleToggle = (ev: MouseEvent) => {
-    setIsToggle(!isToggle)
+  const handleToggle = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    dispatch({ isToggle: !appState.isToggle })
 
     ev.stopPropagation()
   }
 
+  const render = () => {
+    if (appState.isToggle) {
+      return (
+        <>
+          <div className='col'>
+            <div className='title'>
+              原文
+            </div>
+            <div className='text'>{appState.selectedText}</div>
+          </div>
+
+          <div className='line'></div>
+
+          <div className="col">
+            <div className='title'>译文</div>
+            <div className='text' style={resultTextStl}>
+              {
+                appState.loading ? (
+                  <SvgSpinnersEclipse />
+                ) : appState.resultText
+              }
+            </div>
+          </div>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <div>
+            <span>high light range</span>
+            <input
+              checked={appState.highLightRange}
+              type='checkbox'
+              onChange={e => {
+                dispatch({ highLightRange: e.target.checked })
+              }}
+            />
+          </div>
+
+          <div>
+            <span>source language</span>
+            <select>
+              <option>cn</option>
+              <option>en</option>
+              <option>ja</option>
+            </select>
+          </div>
+
+          <div>
+            <span>target language</span>
+            <select>
+              <option>cn</option>
+              <option>en</option>
+              <option>ja</option>
+            </select>
+          </div>
+        </>
+      )
+    }
+  }
+
+  const getHlStl = (): CSSProperties => {
+    const rect = appState.rangeRect
+    if (!appState.highLightRange || !rect) return {}
+    
+    const hlSyule: CSSProperties = {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    }
+
+    return hlSyule
+  }
+
+  const hlStl = getHlStl()
+
   const dom = (
     <div className="wrap" ref={wrapRef}>
+      {
+        appState.highLightRange ? (
+          <div className='highlight' style={hlStl}></div>
+        ) : null
+      }
       <div className='dialog' style={dialogStyle}>
-        <div className='title select_title'>
-          原文
+        <div className='opt'>
+          { appState.isToggle ? 'Translate' : 'Setting' }
+
           <div
             onClick={handleToggle}
-            style={{ fontSize: 24 }}
+            style={{ fontSize: 24, display:'flex' }}
           >
             {
-              isToggle ? <BxToggleLeft /> : <BxToggleRight />
+              appState.isToggle ? <BxToggleLeft /> : <BxToggleRight />
             }
           </div>
         </div>
-        <div className='text'>{selectedText}</div>
-        <hr />
-        <div className='title'>译文</div>
-        <div className='text' style={resultTextStl}>
-          {
-            loading ? (
-              <SvgSpinnersEclipse />
-            ) : resultText
-          }
+
+        <div className={['content',  appState.isToggle ? '' : 'setting' ].join(' ')}>
+          {render()}
         </div>
       </div>
     </div>

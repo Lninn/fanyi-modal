@@ -14,7 +14,7 @@
   color: #242424;
   background: #fff;
   padding: 8px 16px;
-  border: 1px solid;
+  border: 1px solid #ccc;
   border-radius: 3px;
 
   transition: all 0.375s;
@@ -22,16 +22,48 @@
 
 .title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
 }
 
 .text {
   margin-top: 4px;
+  color: #222;
 }
 
-.select_title {
+.opt {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 8px;
+
+  &.setting {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.col {
+  flex-grow: 1;
+}
+
+.line {
+  width: 1px;
+  background-color: #ddd;
+}
+
+.highlight {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 100px;
+  height: 20px;
+  border: 1px solid red;
 }
